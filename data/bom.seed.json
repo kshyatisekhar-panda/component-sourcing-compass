@@ -12,7 +12,7 @@
         "weight_g": 1850,
         "diameter_mm": 200
       },
-      "unit_cost": 42.50,
+      "unit_cost": 42.5,
       "currency": "EUR",
       "lead_time_days": 14,
       "preferred_supplier": "MetalWorks GmbH"
@@ -29,7 +29,7 @@
         "voltage_v": 400,
         "phases": 3
       },
-      "unit_cost": 187.00,
+      "unit_cost": 187.0,
       "currency": "EUR",
       "lead_time_days": 21,
       "preferred_supplier": "ElectroDrive AB"
