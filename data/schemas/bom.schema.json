@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BOM",
+  "description": "Bill of Materials fixture. Two top-level arrays: a components catalogue, and products that each list which components (and quantities) compose them. Hand-authorable; intended as the contract between the Python data-generation track and the TypeScript MCP-server track.",
+  "type": "object",
+  "required": ["components", "products"],
+  "properties": {
+    "components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "products": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/product" }
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "required": ["id", "name", "unit_cost", "currency"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^COMP-[A-Z0-9-]+$",
+          "description": "Stable internal component identifier."
+        },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "manufacturer": { "type": "string" },
+        "manufacturer_part_number": {
+          "type": "string",
+          "description": "MPN. Cross-reference key against Mouser in Phase 2."
+        },
+        "category": {
+          "type": "string",
+          "description": "Free-form bucket (e.g. 'mechanical', 'electrical', 'fluidic'). Drives shape of `specifications`."
+        },
+        "specifications": {
+          "type": "object",
+          "description": "Free-form key/value technical specs. Shape varies by category — schema intentionally does not lock it down.",
+          "additionalProperties": true
+        },
+        "unit_cost": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Latest known unit cost in `currency`. Time-series lives in a separate prices fixture (Phase 2)."
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "ISO 4217 currency code."
+        },
+        "lead_time_days": { "type": "integer", "minimum": 0 },
+        "preferred_supplier": { "type": "string" }
+      }
+    },
+    "product": {
+      "type": "object",
+      "required": ["id", "name", "components"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^PROD-[A-Z0-9-]+$"
+        },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "components": {
+          "type": "array",
+          "description": "Which components, and at what quantity, go into this product. `component_id` must match an entry in the top-level `components` array.",
+          "items": {
+            "type": "object",
+            "required": ["component_id", "quantity"],
+            "properties": {
+              "component_id": { "type": "string" },
+              "quantity": { "type": "number", "exclusiveMinimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  }
+}
