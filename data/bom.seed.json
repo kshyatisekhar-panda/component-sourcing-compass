@@ -1,0 +1,77 @@
+{
+  "components": [
+    {
+      "id": "COMP-HOUSING-AL-200",
+      "name": "Aluminium housing 200mm",
+      "description": "Cast aluminium pressure housing.",
+      "manufacturer": "MetalWorks GmbH",
+      "manufacturer_part_number": "MW-AH-200",
+      "category": "mechanical",
+      "specifications": {
+        "material": "aluminium",
+        "weight_g": 1850,
+        "diameter_mm": 200
+      },
+      "unit_cost": 42.50,
+      "currency": "EUR",
+      "lead_time_days": 14,
+      "preferred_supplier": "MetalWorks GmbH"
+    },
+    {
+      "id": "COMP-MOTOR-3KW",
+      "name": "3kW three-phase motor",
+      "description": "Industrial drive motor.",
+      "manufacturer": "ElectroDrive AB",
+      "manufacturer_part_number": "ED-M3K-400V",
+      "category": "electrical",
+      "specifications": {
+        "power_kw": 3,
+        "voltage_v": 400,
+        "phases": 3
+      },
+      "unit_cost": 187.00,
+      "currency": "EUR",
+      "lead_time_days": 21,
+      "preferred_supplier": "ElectroDrive AB"
+    },
+    {
+      "id": "COMP-VALVE-CHECK-12",
+      "name": "12mm check valve",
+      "description": "One-way check valve, brass body.",
+      "manufacturer": "FluidCorp",
+      "manufacturer_part_number": "FC-CV-12B",
+      "category": "fluidic",
+      "specifications": {
+        "material": "brass",
+        "port_size_mm": 12,
+        "max_pressure_bar": 16
+      },
+      "unit_cost": 8.25,
+      "currency": "EUR",
+      "lead_time_days": 7,
+      "preferred_supplier": "FluidCorp"
+    }
+  ],
+  "products": [
+    {
+      "id": "PROD-AC-COMP-001",
+      "name": "Atlas Compressor Model A",
+      "description": "Mid-range industrial air compressor.",
+      "components": [
+        { "component_id": "COMP-HOUSING-AL-200", "quantity": 1 },
+        { "component_id": "COMP-MOTOR-3KW", "quantity": 1 },
+        { "component_id": "COMP-VALVE-CHECK-12", "quantity": 2 }
+      ]
+    },
+    {
+      "id": "PROD-AC-COMP-002",
+      "name": "Atlas Compressor Model B",
+      "description": "High-output variant of Model A.",
+      "components": [
+        { "component_id": "COMP-HOUSING-AL-200", "quantity": 1 },
+        { "component_id": "COMP-MOTOR-3KW", "quantity": 2 },
+        { "component_id": "COMP-VALVE-CHECK-12", "quantity": 4 }
+      ]
+    }
+  ]
+}

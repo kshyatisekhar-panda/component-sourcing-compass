@@ -38,3 +38,6 @@ coverage/
 *.sqlite
 *.db
 data/local/
+
+# AI assistant guidance (kept local only)
+CLAUDE.md
