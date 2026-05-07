@@ -4,9 +4,13 @@
   "private": true,
   "type": "module",
   "description": "MCP server for AI-assisted component sourcing and compliance verification (Atlas Copco hackathon PoC).",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "tsx src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.ts\" \"data/**/*.json\""
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
@@ -14,6 +18,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "prettier": "^3.8.3",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0"
   }

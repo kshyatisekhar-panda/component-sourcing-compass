@@ -1,49 +1,44 @@
 # Component Sourcing Compass
 
+A natural-language sourcing assistant for manufacturing teams. Ask about your bill of materials, supplier prices, and compliance status; get answers in seconds.
+
+Built for the **Cline AI-Assisted Enterprise Coding Hackathon** on the Atlas Copco *Intelligent Component Sourcing & Compliance Verification* track.
+
 ![Atlas Copco challenge brief](docs/assets/challenge-brief.png)
 
-Built for the **Cline AI-Assisted Enterprise Coding Hackathon**, Atlas Copco challenge track: *Intelligent Component Sourcing & Compliance Verification* (challenge owner: Finn Eklöf Klemming, Product Manager).
+## What it does
 
-A PoC that automatically evaluates and recommends alternative components by matching technical specifications against supplier data, while enforcing regulatory compliance and optimizing for cost, risk, and supply resilience.
+A typical sourcing question today involves cross-referencing component data across ERP, PLM, supplier portals, datasheets, and regulatory feeds. Work that takes weeks. This project exposes that same data through a small set of MCP tools so an LLM can answer the question conversationally:
 
-## Read this first
+> **You:** What components are in Atlas Compressor Model A and what does it cost?
+>
+> **Cline:** Model A contains an aluminium housing (1×, €42.50), a 3kW three-phase motor (1×, €187.00), and 12mm brass check valves (2×, €8.25 each). BOM cost: €245.50.
 
-[**Project and First Brainstorm**](docs/project-and-brainstorm.md) is the team's single source of truth. It covers:
+Today the server answers BOM lookups. Phase 2 adds price history and Mouser comparisons; Phase 3 adds compliance flags and TARIC lookups. The chat surface stays the same as tools are layered in.
 
-- The challenge as given by Atlas Copco
-- Problem statement and pain points
-- Formal PoC charter (scope, methodology, KPIs, deliverables)
-- First brainstorm output: user and goal, tech options, open questions
+## Concepts
 
-## Team
+You only need two ideas to follow the rest of this repo.
 
-_Add team members here._
+**BOM (Bill of Materials).** The parts list for a manufactured product, with quantities. Like an ingredients list on a recipe, but for a compressor: *Atlas Compressor Model A = 1× aluminium housing, 1× 3kW motor, 2× check valves*. The BOM is the spine of every question this server answers. Every cost figure, supplier alternative, and compliance check is anchored to a component on a BOM. Our seed BOM lives in [data/bom.seed.json](data/bom.seed.json) and its shape is defined by [data/schemas/bom.schema.json](data/schemas/bom.schema.json).
 
-## Status
+**MCP (Model Context Protocol).** A standard interface that lets LLM apps call external services. Think USB for AI. This repo is an *MCP server*: it exposes a small set of *tools* (functions like `list_components`) that an *MCP client* (Cline, Claude Desktop, any compatible host) can call when the user asks a question. We wrote the tools; the LLM does the language understanding.
 
-Phase 1 backbone scaffolded. TypeScript MCP server with one end-to-end tool (`list_components`) reading a fixture BOM. Decisions land in the "Decisions" section of [project-and-brainstorm.md](docs/project-and-brainstorm.md).
+That's it. Everything else is implementation detail.
 
-## Architecture at a glance
+## Quick start
 
-- **MCP server (TypeScript)** — [src/index.ts](src/index.ts). Exposes BOM-backed tools to any MCP-aware client.
-- **Data layer (fixtures)** — [data/bom.seed.json](data/bom.seed.json), shape defined by [data/schemas/bom.schema.json](data/schemas/bom.schema.json). The Python data-generation track replaces the seed with a fuller fixture in Phase 2; the schema is the contract.
-- **Demo client** — Cline (the hackathon's branded coding assistant) running the server over stdio.
-
-## Running the MCP server
+Prerequisites: Node 20+, npm.
 
 ```sh
 npm install
-npm run typecheck   # optional: confirm the TS compiles cleanly
-npm start           # runs the server over stdio (only useful when launched by an MCP client)
+npm run typecheck
 ```
 
-The server speaks MCP over stdio, so running it standalone in a terminal is not interactive — point Cline at it instead.
+Then connect an MCP client. We use [Cline](https://cline.bot/) in VS Code:
 
-## Connecting Cline
-
-1. Install the **Cline** extension in VS Code (Extensions panel → search "Cline").
-2. Open Cline's MCP Servers panel and edit `cline_mcp_settings.json`.
-3. Add this entry:
+1. Install the Cline extension. Configure a provider (we use Claude Sonnet 4.5 via OpenRouter).
+2. Open Cline's MCP settings (Cline panel → MCP Servers → Edit settings) and add:
 
    ```json
    {
@@ -57,6 +52,43 @@ The server speaks MCP over stdio, so running it standalone in a terminal is not 
    }
    ```
 
-   The `--silent` is required — without it, npm's own preamble lines go to stdout and corrupt the MCP protocol.
+3. Save. Cline shows the server with a green dot once it connects.
+4. Ask in a Cline chat: *"List the components in product PROD-AC-COMP-001."*
 
-4. Ask Cline *"list components in product PROD-AC-COMP-001"* — it should call `list_components` and return the BOM.
+The `--silent` flag is required. Without it, npm's preamble lines hit stdout and corrupt the JSON-RPC stream.
+
+## Architecture
+
+![Architecture](docs/assets/architecture.svg)
+
+For the proof of concept the data layer is JSON fixtures. Production swaps them for the customer's BOM database, supplier APIs, and compliance feeds; the tool surface stays unchanged.
+
+A separate Python data-generation track produces the fixtures, validated against schemas in [data/schemas/](data/schemas/). See [docs/project-and-brainstorm.md](docs/project-and-brainstorm.md) for the full PoC charter, scope, and team decisions.
+
+## Project layout
+
+```
+src/
+├── index.ts                  MCP server bootstrap
+├── bom.ts                    BOM types and loader
+└── tools/
+    └── list-components.ts    list_components tool
+data/
+├── bom.seed.json             BOM fixture
+└── schemas/
+    └── bom.schema.json       JSON Schema (TS ↔ Python contract)
+docs/
+└── project-and-brainstorm.md PoC charter, brainstorm, decisions
+```
+
+## Roadmap
+
+| Phase | Capability                             | Status      |
+| ----: | :------------------------------------- | :---------- |
+|     1 | `list_components`                      | ✅ shipped   |
+|     2 | `price_history`, `compare_with_mouser` | up next     |
+|     3 | `compliance_flags`, `taric_lookup`     | stretch     |
+
+## Team
+
+_Add team members here._
