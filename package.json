@@ -1,6 +1,6 @@
 {
   "name": "component-sourcing-compass",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "MCP server for AI-assisted component sourcing and compliance verification (Atlas Copco hackathon PoC).",
@@ -8,7 +8,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "tsx src/index.ts",
+    "start": "tsx --env-file=.env src/index.ts",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\" \"data/**/*.json\""
   },

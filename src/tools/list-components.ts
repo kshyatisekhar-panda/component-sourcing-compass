@@ -1,11 +1,12 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { loadBom } from "../bom.js";
+import { text } from "../tool-response.js";
 
 export function registerListComponents(server: McpServer): void {
   server.tool(
     "list_components",
-    "List components from the BOM. With no arguments, returns the full catalogue. With product_id, returns only the components in that product, annotated with quantity_per_product.",
+    "Entry point for all sourcing queries. Call this first to discover valid product IDs and component IDs before calling any other tool. With no arguments, returns the full component catalogue. With product_id, returns only the components in that product with quantities. Always call this when you do not already have a component_id or product_id.",
     {
       product_id: z
         .string()
@@ -42,10 +43,3 @@ export function registerListComponents(server: McpServer): void {
   );
 }
 
-function text(payload: unknown, opts: { error?: boolean } = {}) {
-  const body = typeof payload === "string" ? payload : JSON.stringify(payload, null, 2);
-  return {
-    content: [{ type: "text" as const, text: body }],
-    ...(opts.error ? { isError: true } : {}),
-  };
-}
