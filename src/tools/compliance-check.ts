@@ -1,13 +1,13 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { loadBom } from "../bom.js";
-import { evaluate, loadRules, type Market } from "../compliance.js";
+import { evaluate, loadComplianceContext, type Market } from "../compliance.js";
 import { text } from "../tool-response.js";
 
 export function registerComplianceCheck(server: McpServer): void {
   server.tool(
     "compliance_check",
-    "Verifies compliance of a single component or every component in a product against a target market's regulations (EU: RoHS lead/mercury, REACH SVHC; US: Dodd-Frank Section 1502 conflict minerals). Returns per-component status with violations cited to the specific regulation, severity (blocking vs warning), and an actionable recommendation. Use this when the user asks whether a product can be sold in a market, whether components are RoHS/REACH/3TG compliant, or wants to identify regulatory blockers before launch. Provide either component_id OR product_id (not both), plus the target market.",
+    "Verifies compliance of a single component or every component in a product against a target market's regulations. EU: RoHS lead/mercury thresholds, plus a live cross-reference of declared CAS numbers against the ECHA REACH SVHC Candidate List (data/svhc-cache.json). US: Dodd-Frank Section 1502 conflict minerals declaration. Returns per-component status with violations cited to the specific regulation, severity (blocking vs warning), matched SVHC substances when applicable, and actionable recommendations. Use this when the user asks whether a product can be sold in a market, whether components contain SVHC substances, or wants to identify regulatory blockers before launch. Provide either component_id OR product_id (not both), plus the target market.",
     {
       component_id: z
         .string()
@@ -33,7 +33,7 @@ export function registerComplianceCheck(server: McpServer): void {
         return text("Provide either component_id or product_id, not both.", { error: true });
       }
 
-      const [bom, rules] = await Promise.all([loadBom(), loadRules()]);
+      const [bom, ctx] = await Promise.all([loadBom(), loadComplianceContext()]);
 
       if (component_id) {
         const component = bom.components.find((c) => c.id === component_id);
@@ -41,10 +41,11 @@ export function registerComplianceCheck(server: McpServer): void {
           const known = bom.components.map((c) => c.id).join(", ");
           return text(`Unknown component "${component_id}". Known: ${known}.`, { error: true });
         }
-        const verdict = evaluate(component, market as Market, rules);
+        const verdict = evaluate(component, market as Market, ctx);
         return text({
           scope: { type: "component", id: component.id, name: component.name },
           market,
+          svhc_data: { snapshot_date: ctx.svhc.snapshot_date, source: ctx.svhc.source },
           ...verdict,
         });
       }
@@ -57,7 +58,7 @@ export function registerComplianceCheck(server: McpServer): void {
 
       const verdicts = product.components.flatMap(({ component_id }) => {
         const c = bom.components.find((x) => x.id === component_id);
-        return c ? [evaluate(c, market as Market, rules)] : [];
+        return c ? [evaluate(c, market as Market, ctx)] : [];
       });
 
       const blocking = verdicts.filter((v) => v.status === "non_compliant").length;
@@ -77,6 +78,7 @@ export function registerComplianceCheck(server: McpServer): void {
       return text({
         scope: { type: "product", id: product.id, name: product.name },
         market,
+        svhc_data: { snapshot_date: ctx.svhc.snapshot_date, source: ctx.svhc.source },
         overall_status,
         summary,
         breakdown: {

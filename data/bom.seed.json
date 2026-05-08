@@ -13,7 +13,7 @@
         "diameter_mm": 200,
         "lead_content_pct": 0.0,
         "mercury_content_pct": 0.0,
-        "svhc_declared": true
+        "cas_numbers": ["7429-90-5"]
       },
       "unit_cost": 42.5,
       "currency": "EUR",
@@ -33,7 +33,7 @@
         "phases": 3,
         "lead_content_pct": 0.05,
         "mercury_content_pct": 0.0,
-        "svhc_declared": true,
+        "cas_numbers": ["7440-50-8", "7439-89-6"],
         "conflict_minerals_declared": true
       },
       "unit_cost": 187.0,
@@ -54,7 +54,7 @@
         "max_pressure_bar": 16,
         "lead_content_pct": 4.2,
         "mercury_content_pct": 0.0,
-        "svhc_declared": false
+        "cas_numbers": ["7440-50-8", "7440-66-6", "7439-92-1"]
       },
       "unit_cost": 8.25,
       "currency": "EUR",

@@ -31,13 +31,13 @@
     {
       "id": "EU-REACH-SVHC",
       "market": "EU",
-      "regulation": "REACH (EC) No 1907/2006",
-      "title": "Substance of Very High Concern (SVHC) declaration required",
-      "description": "REACH requires a manufacturer declaration when SVHC-listed substances are present above 0.1%. A declaration on file is required for every component sold into the EU.",
+      "regulation": "REACH (EC) No 1907/2006, Article 33",
+      "title": "Substances of Very High Concern (SVHC) — disclosure required",
+      "description": "REACH Article 33 requires manufacturers to disclose presence of substances on the ECHA SVHC Candidate List above 0.1% (w/w) to recipients of the article. Cross-references each component's declared CAS numbers against the live SVHC cache (data/svhc-cache.json).",
       "severity": "warning",
       "check": {
-        "type": "required_declaration",
-        "spec_field": "svhc_declared"
+        "type": "svhc_substance_match",
+        "spec_field": "cas_numbers"
       }
     },
     {

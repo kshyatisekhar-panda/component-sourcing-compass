@@ -64,6 +64,18 @@
             "spec_field": { "type": "string" }
           },
           "description": "Component spec value at `spec_field` must be exactly `true`."
+        },
+        {
+          "type": "object",
+          "required": ["type", "spec_field"],
+          "properties": {
+            "type": { "const": "svhc_substance_match" },
+            "spec_field": {
+              "type": "string",
+              "description": "Component spec field that holds an array of CAS numbers (strings)."
+            }
+          },
+          "description": "Each CAS number listed in `spec_field` is cross-referenced against the ECHA SVHC Candidate List in data/svhc-cache.json. A violation is raised if any match is found."
         }
       ]
     }
