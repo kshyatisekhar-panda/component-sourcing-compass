@@ -18,7 +18,7 @@ async function loadHistory(): Promise<PriceHistory> {
 export function registerGetPriceHistory(server: McpServer): void {
   server.tool(
     "get_price_history",
-    "Returns the monthly price history for a component over the last 3 months or 1 year, with trend direction and percentage change. Use this to understand whether a component's cost is rising, falling, or stable over time.",
+    "Returns monthly price history for a component over the last 3 months or 1 year, with trend direction and percentage change. Use this when the user asks about price trends, cost evolution, or whether a component is getting more expensive. A good follow-up after cost_ranked_list — check whether the highest-cost components are trending up (rising risk) or down (opportunity to renegotiate).",
     {
       component_id: z.string().describe("Component ID (e.g. COMP-MOTOR-3KW)"),
       period: z

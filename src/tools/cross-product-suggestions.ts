@@ -5,7 +5,7 @@ import { text } from "../tool-response.js";
 export function registerCrossProductSuggestions(server: McpServer): void {
   server.tool(
     "cross_product_suggestions",
-    "Analyses which components are shared across multiple products and ranks them by total portfolio cost impact. A single sourcing win on a shared component multiplies across the whole product range. Use this to prioritise where to focus cost-reduction efforts.",
+    "Analyses components shared across multiple products and ranks them by total portfolio cost impact. Use this when the user asks about portfolio-wide optimisation, cross-product savings, or which single sourcing decision would have the broadest impact. A saving on a shared component multiplies across every product that uses it — this tool surfaces those leverage points.",
     {},
     async () => {
       const bom = await loadBom();
