@@ -105,25 +105,36 @@ A separate Python data-generation track produces the fixtures, validated against
 
 ```
 src/
-├── index.ts                  MCP server bootstrap
-├── bom.ts                    BOM types and loader
+├── index.ts                       MCP server bootstrap, registers all tools
+├── bom.ts                         BOM types and loader
+├── compliance.ts                  rule engine (RoHS, REACH, conflict minerals)
+├── mouser.ts                      Mouser API client + recorded fallback
+├── tavily.ts                      Tavily web search fallback
+├── config.ts, tool-response.ts    shared helpers
 └── tools/
-    └── list-components.ts    list_components tool
+    ├── list-components.ts
+    ├── cost-ranked-list.ts
+    ├── get-price-history.ts
+    ├── compare-with-mouser.ts
+    ├── cross-product-suggestions.ts
+    └── compliance-check.ts
 data/
-├── bom.seed.json             BOM fixture
-└── schemas/
-    └── bom.schema.json       JSON Schema (TS ↔ Python contract)
+├── bom.seed.json                  BOM fixture
+├── price-history.seed.json        monthly price history per component
+├── compliance-rules.seed.json     regulatory rules (EU + US)
+└── schemas/                       JSON Schema contracts
 docs/
-└── project-and-brainstorm.md PoC charter, brainstorm, decisions
+└── project-and-brainstorm.md      PoC charter, brainstorm, decisions
 ```
 
 ## Roadmap
 
-| Phase | Capability                             | Status      |
-| ----: | :------------------------------------- | :---------- |
-|     1 | `list_components`                      | ✅ shipped   |
-|     2 | `price_history`, `compare_with_mouser` | up next     |
-|     3 | `compliance_flags`, `taric_lookup`     | stretch     |
+| Phase | Capability                                                  | Status      |
+| ----: | :---------------------------------------------------------- | :---------- |
+|     1 | `list_components`                                           | ✅ shipped   |
+|     2 | `cost_ranked_list`, `get_price_history`, `compare_with_mouser`, `cross_product_suggestions` | ✅ shipped   |
+|     3 | `compliance_check` (RoHS, REACH, Dodd-Frank 1502)           | ✅ shipped   |
+|     - | `taric_lookup`, automated assurance docs                    | stretch     |
 
 ## Team
 

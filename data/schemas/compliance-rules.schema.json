@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Compliance rules",
+  "description": "Set of regulatory rules per market. Each rule defines a check applied to a component's `specifications`. The compliance_check tool walks the rule list and, for each rule whose market and category match, evaluates the component's spec field against the rule's check. The fixture in data/compliance-rules.seed.json is the source of truth; production would back this with a maintained regulatory database.",
+  "type": "object",
+  "required": ["rules"],
+  "properties": {
+    "rules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/rule" }
+    }
+  },
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "required": ["id", "market", "regulation", "title", "severity", "check"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9-]+$",
+          "description": "Stable identifier, e.g. EU-ROHS-LEAD."
+        },
+        "market": {
+          "type": "string",
+          "enum": ["EU", "US"]
+        },
+        "regulation": {
+          "type": "string",
+          "description": "Full citation of the regulation, e.g. 'RoHS Directive 2011/65/EU'."
+        },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "applies_to_categories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "If present, the rule only applies to components whose `category` is in this list. If absent, the rule applies to every component."
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["blocking", "warning"],
+          "description": "blocking = cannot be placed on the market; warning = saleable but documentation gap exists."
+        },
+        "check": { "$ref": "#/$defs/check" }
+      }
+    },
+    "check": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "spec_field", "threshold"],
+          "properties": {
+            "type": { "const": "max_threshold" },
+            "spec_field": { "type": "string" },
+            "threshold": { "type": "number" },
+            "unit": { "type": "string" }
+          },
+          "description": "Component spec value at `spec_field` must be <= `threshold`."
+        },
+        {
+          "type": "object",
+          "required": ["type", "spec_field"],
+          "properties": {
+            "type": { "const": "required_declaration" },
+            "spec_field": { "type": "string" }
+          },
+          "description": "Component spec value at `spec_field` must be exactly `true`."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "rules": [
+    {
+      "id": "EU-ROHS-LEAD",
+      "market": "EU",
+      "regulation": "RoHS Directive 2011/65/EU",
+      "title": "Lead (Pb) content must not exceed 0.1% by weight",
+      "description": "EU RoHS restricts lead in homogeneous materials to 1000 ppm (0.1%). Components above this threshold cannot be placed on the EU market without an exemption.",
+      "severity": "blocking",
+      "check": {
+        "type": "max_threshold",
+        "spec_field": "lead_content_pct",
+        "threshold": 0.1,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "EU-ROHS-MERCURY",
+      "market": "EU",
+      "regulation": "RoHS Directive 2011/65/EU",
+      "title": "Mercury (Hg) content must not exceed 0.1% by weight",
+      "description": "EU RoHS restricts mercury in homogeneous materials to 0.1%.",
+      "severity": "blocking",
+      "check": {
+        "type": "max_threshold",
+        "spec_field": "mercury_content_pct",
+        "threshold": 0.1,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "EU-REACH-SVHC",
+      "market": "EU",
+      "regulation": "REACH (EC) No 1907/2006",
+      "title": "Substance of Very High Concern (SVHC) declaration required",
+      "description": "REACH requires a manufacturer declaration when SVHC-listed substances are present above 0.1%. A declaration on file is required for every component sold into the EU.",
+      "severity": "warning",
+      "check": {
+        "type": "required_declaration",
+        "spec_field": "svhc_declared"
+      }
+    },
+    {
+      "id": "US-CONFLICT-MINERALS",
+      "market": "US",
+      "regulation": "Dodd-Frank Section 1502",
+      "title": "Conflict minerals (3TG) due-diligence declaration required",
+      "description": "Components containing tin, tantalum, tungsten, or gold (3TG) require a due-diligence declaration filed with the SEC. Applies to electrical and electronic components.",
+      "applies_to_categories": ["electrical", "electronics"],
+      "severity": "blocking",
+      "check": {
+        "type": "required_declaration",
+        "spec_field": "conflict_minerals_declared"
+      }
+    }
+  ]
+}

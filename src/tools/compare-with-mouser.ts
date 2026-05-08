@@ -38,7 +38,11 @@ export function registerCompareWithMouser(server: McpServer): void {
 
         return text({
           component: { id: component.id, name: component.name },
-          bom_price: { eur: component.unit_cost, currency: "EUR", supplier: component.preferred_supplier },
+          bom_price: {
+            eur: component.unit_cost,
+            currency: "EUR",
+            supplier: component.preferred_supplier,
+          },
           mouser: null,
           web_search: tavily.found
             ? {
