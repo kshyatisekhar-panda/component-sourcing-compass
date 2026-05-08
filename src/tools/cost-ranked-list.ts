@@ -6,7 +6,7 @@ import { text } from "../tool-response.js";
 export function registerCostRankedList(server: McpServer): void {
   server.tool(
     "cost_ranked_list",
-    "Returns the components for a product ranked by total cost contribution (unit_cost × quantity), with each line's percentage share of total BOM cost. Use this to identify the highest-value components to target for cost reduction.",
+    "Returns components for a product ranked by total cost contribution (unit_cost × quantity), with each line's share of total BOM cost. Use this when the user asks which components drive cost, what the BOM cost breakdown is, or where to focus cost-reduction efforts. Follow up with compare_with_mouser on the top-ranked components to find savings.",
     { product_id: z.string().describe("Product ID to analyse (e.g. PROD-AC-COMP-001)") },
     async ({ product_id }) => {
       const bom = await loadBom();

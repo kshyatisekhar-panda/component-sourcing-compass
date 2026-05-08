@@ -2,13 +2,14 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { loadBom } from "../bom.js";
 import { searchByMfrPartNumber } from "../mouser.js";
+import { searchComponent } from "../tavily.js";
 import { USD_TO_EUR } from "../config.js";
 import { text } from "../tool-response.js";
 
 export function registerCompareWithMouser(server: McpServer): void {
   server.tool(
     "compare_with_mouser",
-    "Looks up a component on Mouser Electronics by manufacturer part number and compares the market price against the current BOM price. Returns potential savings or premium per unit, stock availability, lead time, and a sourcing recommendation.",
+    "Looks up a component on Mouser Electronics and compares the market price against the current BOM price. Returns savings or premium per unit, stock availability, lead time, and a sourcing recommendation. Use this when the user asks whether they are overpaying, whether there are cheaper alternatives, or what Mouser charges for a component. If Mouser has no listing, automatically falls back to a Tavily web search for market pricing context.",
     { component_id: z.string().describe("Component ID to compare (e.g. COMP-MOTOR-3KW)") },
     async ({ component_id }) => {
       const bom = await loadBom();
@@ -27,12 +28,28 @@ export function registerCompareWithMouser(server: McpServer): void {
 
       const mouser = await searchByMfrPartNumber(component.manufacturer_part_number);
 
+      // Mouser returned no live listing — try Tavily web search before falling back to mock
       if (!mouser.found) {
+        const tavily = await searchComponent(
+          component.name,
+          component.manufacturer_part_number,
+          component.manufacturer ?? "",
+        );
+
         return text({
           component: { id: component.id, name: component.name },
-          bom_price: { value: component.unit_cost, currency: component.currency },
+          bom_price: { eur: component.unit_cost, currency: "EUR", supplier: component.preferred_supplier },
           mouser: null,
-          note: "Component not found on Mouser. Verify the manufacturer part number.",
+          web_search: tavily.found
+            ? {
+                query: tavily.query,
+                answer: tavily.answer,
+                sources: tavily.sources,
+              }
+            : null,
+          note: tavily.found
+            ? "Component not found on Mouser directly. Web search results above may indicate alternative pricing or suppliers."
+            : "Component not found on Mouser or via web search. Verify the manufacturer part number.",
         });
       }
 
