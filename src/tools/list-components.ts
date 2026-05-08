@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { loadBom } from "../bom.js";
+import { text } from "../tool-response.js";
 
 export function registerListComponents(server: McpServer): void {
   server.tool(
@@ -42,10 +43,3 @@ export function registerListComponents(server: McpServer): void {
   );
 }
 
-function text(payload: unknown, opts: { error?: boolean } = {}) {
-  const body = typeof payload === "string" ? payload : JSON.stringify(payload, null, 2);
-  return {
-    content: [{ type: "text" as const, text: body }],
-    ...(opts.error ? { isError: true } : {}),
-  };
-}
