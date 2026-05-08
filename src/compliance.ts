@@ -69,15 +69,19 @@ export type ComponentVerdict = {
   violations: Violation[];
 };
 
+let cachedContext: ComplianceContext | null = null;
+
 export async function loadComplianceContext(): Promise<ComplianceContext> {
+  if (cachedContext) return cachedContext;
   const [rulesRaw, svhcRaw] = await Promise.all([
     readFile(RULES_PATH, "utf8"),
     readFile(SVHC_PATH, "utf8"),
   ]);
-  return {
+  cachedContext = {
     rules: (JSON.parse(rulesRaw) as { rules: Rule[] }).rules,
     svhc: JSON.parse(svhcRaw) as SvhcCache,
   };
+  return cachedContext;
 }
 
 export function evaluate(
