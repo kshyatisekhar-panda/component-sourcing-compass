@@ -2,15 +2,15 @@
 
 Type these into Cline during the demo. For internal LLM prompt reference (tool descriptions, system prompts, agent rules), see [internal-prompts.md](internal-prompts.md).
 
-1. List the components in product PROD-AC-COMP-001.
-2. Show me a cost ranked breakdown for Atlas Copco LE 3.
-3. How has the 3kW motor's price moved over the last year?
-4. Where can I save money on the LE 3? Look at the biggest cost components and check Mouser.
-5. Which sourcing changes have the biggest cross product impact?
-6. Can we sell Atlas Copco LE 3 in the EU?
-7. What about the US market?
-8. What specific substance is the problem in the EU and when did the regulator add it?
-9. Generate a compliance certificate for Atlas Copco LE 3 for the EU market.
-10. Now generate one for the US market.
-11. I am preparing to launch Atlas Copco LE 3 in Europe. Walk me through cost optimisation opportunities and any compliance issues I need to fix before we can ship.
-12. Tell me about the Atlas Copco GA110 compressor. Look up cost and EU compliance.
+1. List the components in the Atlas Copco LE 3.
+2. Show me the cost breakdown of the Atlas Copco LE 3.
+3. How has the 3 kW IE3 motor's price moved over the last year?
+4. Where can I save money on the Atlas Copco LE 3? Look at the biggest cost components and check Mouser.
+5. Which sourcing changes have the biggest impact across our LE 3 and LE 7 portfolio?
+6. Is the Atlas Copco LE 3 RoHS and REACH compliant for sale in the EU?
+7. What about the US market under Dodd Frank Section 1502?
+8. Which SVHC substance triggered the EU flag and when did ECHA add it to the Candidate List?
+9. Generate a compliance certificate for the Atlas Copco LE 3 for the EU market.
+10. Now generate one for the US market so I can compare.
+11. I am preparing to launch the Atlas Copco LE 3 in Europe. Walk me through cost optimisation opportunities and any RoHS or REACH issues I need to fix before we can ship.
+12. Tell me about the Atlas Copco GA 110 compressor. Look up cost and EU compliance.

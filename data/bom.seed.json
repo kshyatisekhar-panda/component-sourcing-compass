@@ -2,8 +2,8 @@
   "components": [
     {
       "id": "COMP-HOUSING-AL-200",
-      "name": "Aluminium housing 200mm",
-      "description": "Cast aluminium pressure housing.",
+      "name": "Cast aluminium pressure housing 200 mm",
+      "description": "Cast aluminium pressure housing, 200 mm internal bore, rated to 10 bar working pressure.",
       "manufacturer": "MetalWorks GmbH",
       "manufacturer_part_number": "MW-AH-200",
       "category": "mechanical",
@@ -22,8 +22,8 @@
     },
     {
       "id": "COMP-MOTOR-3KW",
-      "name": "3kW three-phase motor",
-      "description": "Industrial drive motor.",
+      "name": "3 kW IE3 three-phase induction motor",
+      "description": "Industrial three-phase IE3 induction motor, 400 V, 50 Hz, B3 foot mount.",
       "manufacturer": "ElectroDrive AB",
       "manufacturer_part_number": "ED-M3K-400V",
       "category": "electrical",
@@ -43,8 +43,8 @@
     },
     {
       "id": "COMP-VALVE-CHECK-12",
-      "name": "12mm check valve",
-      "description": "One-way check valve, brass body.",
+      "name": "12 mm brass non-return check valve",
+      "description": "Brass body 12 mm non-return check valve, 16 bar maximum working pressure.",
       "manufacturer": "FluidCorp",
       "manufacturer_part_number": "FC-CV-12B",
       "category": "fluidic",
