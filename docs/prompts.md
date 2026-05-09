@@ -184,48 +184,40 @@ The verdict data is the same shape returned by `compliance_check` so the LLM get
 
 ## Quick reference (copy paste)
 
-Compact versions of every prompt, in one block. Tighter wording, same intent. Copy these into the source files if you want a slimmer version of the prompts.
+### Tool prompts
 
-### Tool descriptions
+- `list_components`: Returns the BOM, optionally filtered by `product_id`. Call first to discover IDs.
+- `cost_ranked_list`: Components for a product ranked by line cost with cost share.
+- `get_price_history`: Monthly price history (3m or 1y) with trend and percent change.
+- `compare_with_mouser`: Mouser market price vs BOM, stock, lead time, switch recommendation. Tavily fallback.
+- `cross_product_suggestions`: Shared components ranked by total portfolio cost impact.
+- `compliance_check`: Per component verdict for EU (RoHS, REACH SVHC) or US (Dodd Frank 1502).
+- `generate_sourcing_report`: Full sourcing brief (cost, compliance, Mouser, trends) saved as HTML to Desktop.
+- `generate_compliance_report`: Formal AI written compliance certificate, branded HTML. Requires `OPENROUTER_API_KEY`.
 
-- **list_components** — Entry point for sourcing queries. Returns the BOM catalogue, optionally filtered by `product_id`. Call first whenever you do not already have a component_id or product_id.
-- **cost_ranked_list** — Components for a product ranked by line cost (unit_cost × quantity), with each line's share of total BOM cost. Use for "what drives cost" or "where to cut". Chain with `compare_with_mouser` on the top line.
-- **get_price_history** — Monthly price history for one component over 3m or 1y, with trend and percent change. Use for "is this getting more expensive" and as a follow up to `cost_ranked_list` to spot rising risks.
-- **compare_with_mouser** — Mouser market price vs BOM price, plus stock, lead time, and a switch recommendation. Tavily web search fallback if Mouser has no listing. Use for "are we overpaying" or "is there a cheaper supplier".
-- **cross_product_suggestions** — Shared components across products, ranked by total portfolio cost impact. Use for "biggest cross product saving" or "where does one change ripple furthest". No inputs.
-- **compliance_check** — Per component verdict against EU (RoHS lead/mercury, REACH SVHC via ECHA snapshot) or US (Dodd Frank 1502 conflict minerals). Returns severity and citation. Use for "can we sell in market X" or "any regulatory blockers". Inputs: `product_id` or `component_id`, `market`.
-- **generate_sourcing_report** — Full internal sourcing brief in one call: cost, compliance, Mouser, trends, recommendations. Markdown to chat, styled HTML to Desktop. Use for "give me a report" or "summary for a meeting". Prefer over chaining tools manually.
-- **generate_compliance_report** — Formal customer facing compliance certificate, AI written, Atlas Copco branded. Returns prose plus HTML under `output/`. Use for "compliance certificate", "audit document", "customer disclosure". Requires `OPENROUTER_API_KEY`.
-
-### Compliance certificate system prompt (compact)
+### Compliance certificate system prompt
 
 ```
-You are a senior Atlas Copco compliance officer writing formal certificates
-for customer disclosure. Tone: conservative, precise, auditable. Cite
-regulations by full reference (e.g. RoHS Directive 2011/65/EU, REACH (EC)
-1907/2006 Article 33, Dodd Frank Section 1502). Never invent component data.
+Senior Atlas Copco compliance officer. Cite regulations by full reference
+(RoHS 2011/65/EU, REACH 1907/2006 Article 33, Dodd Frank 1502). Never invent
+component data.
 
-Output: 300–450 words. Four `##` sections in this order: Scope of
-Assessment, Findings Summary, Detailed Findings, Conclusion. Flowing prose,
-no bullets, no top-level title, no metadata block (the renderer handles
-those). Use **bold** sparingly for key findings (substance name, percentage,
-verdict).
+300–450 words, four `##` sections: Scope of Assessment, Findings Summary,
+Detailed Findings, Conclusion. Flowing prose, no bullets, no title, no
+metadata block. **Bold** key findings sparingly.
 
-Conclusion must match overall_status:
-- non_compliant: cannot be placed on the market until violations are remediated.
-- warning: saleable but documentation gaps remain.
-- compliant: clear positive attestation.
+Conclusion matches overall_status: non_compliant blocks market entry, warning
+needs disclosure, compliant attests.
 ```
 
-### Compliance certificate user prompt (compact)
+### Compliance certificate user prompt
 
 ```
-Generate a compliance certificate from the following verdict data.
+Generate a compliance certificate from this verdict data:
 
 ```json
 { verdict_payload }
 ```
 
-The customer is placing an order for {product_name} in the {market} market
-and needs to know whether it can be sold and any actions required first.
+Customer is placing an order for {product_name} in {market}.
 ```
