@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Sourcing & Cost Analysis Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform:translateY(-20px); }
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 40px;
+            margin-bottom: 30px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 35px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .stat-subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .product-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .product-cost {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        thead {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+        }
+
+        th {
+            padding: 20px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #fff;
+        }
+
+        td {
+            padding: 18px 20px;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.01);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .badge-danger {
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            color: white;
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .badge-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 35px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-height: 400px;
+        }
+
+        .chart-container canvas {
+            max-height: 300px !important;
+        }
+
+        .alert-critical {
+            background: linear-gradient(135deg, rgba(238, 9, 121, 0.9) 0%, rgba(255, 106, 0, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 30px 0;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 50px rgba(238, 9, 121, 0.4);
+        }
+
+        .alert-critical h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, rgba(250, 177, 160, 0.3) 0%, rgba(255, 196, 0, 0.3) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 35px;
+            margin: 25px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .recommendation-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .recommendation-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendation-card li {
+            padding: 12px 0 12px 30px;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.8;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .recommendation-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: 800;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .savings-banner {
+            background: linear-gradient(135deg, rgba(17, 153, 142, 0.9) 0%, rgba(56, 239, 125, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 50px rgba(17, 153, 142, 0.4);
+        }
+
+        .savings-banner h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .compliance-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .compliance-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .compliance-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .compliance-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .status-badge {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .chart-grid .chart-container {
+            max-height: 350px;
+        }
+
+        .chart-grid canvas {
+            max-height: 250px !important;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .stat-value { font-size: 2rem; }
+            .product-header { flex-direction: column; gap: 20px; }
+            table { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Component Sourcing & Cost Analysis</h1>
+            <p>Comprehensive Bill of Materials Analysis with Sourcing Recommendations</p>
+            <p style="font-size: 0.95rem; margin-top: 15px; opacity: 0.8;">Generated: May 9, 2026</p>
+        </div>
+
+        <div class="glass-card">
+            <h2 class="section-title">📈 Executive Summary</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Products</div>
+                    <div class="stat-value">2</div>
+                    <div class="stat-subtitle">Atlas Compressor Models</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Components</div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-subtitle">Unique Parts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total BOM Cost</div>
+                    <div class="stat-value">€695.50</div>
+                    <div class="stat-subtitle">Combined Production</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Savings Potential</div>
+                    <div class="stat-value">€17.46</div>
+                    <div class="stat-subtitle">Via Mouser (~2.5%)</div>
+                </div>
+                <div class="stat-card" style="border: 3px solid rgba(238, 9, 121, 0.6);">
+                    <div class="stat-label" style="color: #ff6a00;">EU Compliance</div>
+                    <div class="stat-value" style="color: #ff6a00;">❌</div>
+                    <div class="stat-subtitle" style="color: #ff6a00; font-weight: 700;">Valve Issue</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2 class="section-title">💼 Product Cost Breakdown</h2>
+            
+            <div class="product-card">
+                <div class="product-header">
+                    <div>
+                        <div class="product-name">Atlas Compressor Model A</div>
+                        <div style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-top: 5px;">PROD-AC-COMP-001</div>
+                    </div>
+                    <div class="product-cost">€246.00</div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Component</th>
+                            <th>Category</th>
+                            <th>Qty</th>
+                            <th>Unit Cost</th>
+                            <th>Line Cost</th>
+                            <th>Share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-danger">1</span></td>
+                            <td><strong>3kW three-phase motor</strong></td>
+                            <td>Electrical</td>
+                            <td>1</td>
+                            <td>€187.00</td>
+                            <td><strong>€187.00</strong></td>
+                            <td><strong>76.0%</strong></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">2</span></td>
+                            <td><strong>Aluminium housing 200mm</strong></td>
+                            <td>Mechanical</td>
+                            <td>1</td>
+                            <td>€42.50</td>
+                            <td><strong>€42.50</strong></td>
+                            <td><strong>17.3%</strong></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">3</span></td>
+                            <td><strong>12mm check valve</strong></td>
+                            <td>Fluidic</td>
+                            <td>2</td>
+                            <td>€8.25</td>
+                            <td><strong>€16.50</strong></td>
+                            <td><strong>6.7%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="chart-container">
+                    <canvas id="product1Chart"></canvas>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <div>
+                        <div class="product-name">Atlas Compressor Model B</div>
+                        <div style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-top: 5px;">PROD-AC-COMP-002</div>
+                    </div>
+                    <div class="product-cost">€449.50</div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Component</th>
+                            <th>Category</th>
+                            <th>Qty</th>
+                            <th>Unit Cost</th>
+                            <th>Line Cost</th>
+                            <th>Share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-danger">1</span></td>
+                            <td><strong>3kW three-phase motor</strong></td>
+                            <td>Electrical</td>
+                            <td>2</td>
+                            <td>€187.00</td>
+                            <td><strong>€374.00</strong></td>
+                            <td><strong>83.2%</strong></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">2</span></td>
+                            <td><strong>Aluminium housing 200mm</strong></td>
+                            <td>Mechanical</td>
+                            <td>1</td>
+                            <td>€42.50</td>
+                            <td><strong>€42.50</strong></td>
+                            <td><strong>9.5%</strong></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">3</span></td>
+                            <td><strong>12mm check valve</strong></td>
+                            <td>Fluidic</td>
+                            <td>4</td>
+                            <td>€8.25</td>
+                            <td><strong>€33.00</strong></td>
+                            <td><strong>7.3%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="chart-container">
+                    <canvas id="product2Chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2 class="section-title">⚠️ Compliance & Regulatory Status</h2>
+            
+            <div class="alert-critical">
+                <h3>🚨 CRITICAL: EU Market Non-Compliance</h3>
+                <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 15px;">
+                    <strong>Both products CANNOT be sold in the EU market without remediation.</strong>
+                </p>
+                <p style="font-size: 1rem; line-height: 1.8;">
+                    The 12mm check valve (COMP-VALVE-CHECK-12) contains <strong>4.2% lead</strong> — <strong>42× over</strong> the RoHS Directive 2011/65/EU limit of 0.1% Pb by weight. This is a <strong>BLOCKING violation</strong>.
+                </p>
+            </div>
+
+            <div class="compliance-cards">
+                <div class="compliance-card" style="border-top: 5px solid #ee0979;">
+                    <h3>🇪🇺 European Union</h3>
+                    <div class="status-badge" style="color: #ee0979;">❌ NON-COMPLIANT</div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                        <div style="margin: 10px 0;">✅ Aluminium housing: <strong>Compliant</strong></div>
+                        <div style="margin: 10px 0;">✅ 3kW Motor: <strong>Compliant</strong></div>
+                        <div style="margin: 10px 0; color: #ff6a00;">❌ Check Valve: <strong>BLOCKED</strong></div>
+                    </div>
+                    <div style="background: rgba(255, 196, 0, 0.2); padding: 15px; border-radius: 12px; border-left: 4px solid #ffc400;">
+                        <strong>Violations:</strong>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>RoHS Lead: 4.2% (limit: 0.1%)</li>
+                            <li>REACH SVHC: Disclosure required</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="compliance-card" style="border-top: 5px solid #38ef7d;">
+                    <h3>🇺🇸 United States</h3>
+                    <div class="status-badge" style="color: #38ef7d;">✅ COMPLIANT</div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                        <div style="margin: 10px 0;">✅ Aluminium housing: <strong>Compliant</strong></div>
+                        <div style="margin: 10px 0;">✅ 3kW Motor: <strong>Compliant</strong></div>
+                        <div style="margin: 10px 0;">✅ Check Valve: <strong>Compliant</strong></div>
+                    </div>
+                    <div style="background: rgba(56, 239, 125, 0.2); padding: 15px; border-radius: 12px; border-left: 4px solid #38ef7d;">
+                        <strong>Key Points:</strong>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Conflict minerals declared</li>
+                            <li>Dodd-Frank compliant</li>
+                            <li>All components cleared</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommendation-card">
+                <h3>🔧 Remediation Actions for EU Market</h3>
+                <ul>
+                    <li><strong>URGENT:</strong> Source RoHS-compliant lead-free check valve alternative with ≤0.1% lead content</li>
+                    <li>Investigate lead-free brass alloys (CW511L, CW724R) or stainless steel alternatives</li>
+                    <li>Apply for RoHS exemption if no alternative exists (12-18 month process)</li>
+                    <li>Implement REACH Article 33 SVHC disclosure for substances >0.1% w/w</li>
+                    <li>Engage FluidCorp for RoHS-compliant variants or qualify alternate suppliers immediately</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2 class="section-title">🔍 Sourcing Analysis</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Manufacturer</th>
+                        <th>BOM Price</th>
+                        <th>Mouser Price</th>
+                        <th>Savings</th>
+                        <th>Stock</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>3kW motor</strong><br><small style="opacity:0.7;">COMP-MOTOR-3KW</small></td>
+                        <td>ElectroDrive AB</td>
+                        <td>€187.00</td>
+                        <td>€181.48</td>
+                        <td><span class="badge badge-success">€5.52 (3%)</span></td>
+                        <td>12 units</td>
+                        <td><span class="badge badge-success">✓ Switch</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Al housing 200mm</strong><br><small style="opacity:0.7;">COMP-HOUSING-AL-200</small></td>
+                        <td>MetalWorks GmbH</td>
+                        <td>€42.50</td>
+                        <td>€42.87</td>
+                        <td><span class="badge badge-info">-€0.37</span></td>
+                        <td>47 units</td>
+                        <td><span class="badge badge-info">Keep</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>12mm check valve</strong><br><small style="opacity:0.7;">COMP-VALVE-CHECK-12</small></td>
+                        <td>FluidCorp</td>
+                        <td>€8.25</td>
+                        <td>€8.10</td>
+                        <td><span class="badge badge-success">€0.15 (2%)</span></td>
+                        <td>523 units</td>
+                        <td><span class="badge badge-success">✓ Switch</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="savings-banner">
+                <h2>💰 Total Savings: €17.46 per Combined Run (~2.5%)</h2>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2 class="section-title">📈 12-Month Price Trends</h2>
+            
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <h3 style="color: #fff; margin-bottom: 20px;">3kW Motor Trend</h3>
+                    <canvas id="motorChart"></canvas>
+                    <p style="color: #38ef7d; text-align: center; margin-top: 15px; font-weight: 600;">▼ Falling 5.8% — Good buying opportunity</p>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 style="color: #fff; margin-bottom: 20px;">Aluminium Housing Trend</h3>
+                    <canvas id="housingChart"></canvas>
+                    <p style="color: #38ef7d; text-align: center; margin-top: 15px; font-weight: 600;">▼ Falling 9.2% — Excellent opportunity</p>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 style="color: #fff; margin-bottom: 20px;">Check Valve Trend</h3>
+                    <canvas id="valveChart"></canvas>
+                    <p style="color: #ee0979; text-align: center; margin-top: 15px; font-weight: 600;">▲ Rising 10.0% — Consider bulk ordering</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2 class="section-title">💡 Key Recommendations</h2>
+            
+            <div class="recommendation-card" style="background: linear-gradient(135deg, rgba(238, 9, 121, 0.3), rgba(255, 106, 0, 0.3));">
+                <h3>🚨 CRITICAL Priority</h3>
+                <ul>
+                    <li><strong>Priority  1 — EU Compliance Blocker:</strong> Immediately source RoHS-compliant lead-free check valve. Current valve blocks ALL EU market access</li>
+                    <li><strong>Compliance-First Sourcing:</strong> Verify Mouser stocks RoHS-compliant lead-free versions before switching</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-card">
+                <h3>🎯 Cost Optimization</h3>
+                <ul>
+                    <li>Switch motor sourcing to Mouser → Save €5.52/unit (3.0%) = €16.56 per combined run</li>
+                    <li>Switch valve sourcing with compliance verification → €0.15/unit savings ONLY if RoHS-compliant</li>
+                    <li>Monitor valve pricing (10% YoY increase) but DO NOT bulk order until compliance resolved</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-card" style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.3), rgba(0, 242, 254, 0.3));">
+                <h3>🔮 Strategic Insights</h3>
+                <ul>
+                    <li><strong>Focus on Motors:</strong> 80.7% of portfolio cost — highest leverage point (5% reduction = €28.05 savings)</li>
+                    <li><strong>Market Conditions:</strong> Motors (-5.8%) and housings (-9.2%) declining — favorable for purchasing</li>
+                    <li><strong>Supply Chain:</strong> Mouser provides alternate supplier option, reducing single-source risk</li>
+                    <li><strong>Compliance Risk:</strong> EU non-compliance blocks €695.50 in potential revenue per run</li>
+                    <li><strong>Market Strategy:</strong> US market ready to proceed; EU requires valve replacement first</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">Component Sourcing Compass</p>
+            <p>Report Generated: May 9, 2026 at 11:24 AM (Europe/Stockholm)</p>
+            <p style="font-size: 0.9rem; margin-top: 15px; opacity: 0.8;">Data sources: Internal BOM, Mouser Electronics API, Market Price History</p>
+        </div>
+    </div>
+
+    <script>
+        const chartColors = {
+            primary: 'rgba(102, 126, 234, 1)',
+            success: 'rgba(56, 239, 125, 1)',
+            danger: 'rgba(238, 9, 121, 1)',
+            warning: 'rgba(245, 87, 108, 1)',
+            info: 'rgba(79, 172, 254, 1)'
+        };
+
+        // Product 1 Chart - Horizontal Bar
+        new Chart(document.getElementById('product1Chart'), {
+            type: 'bar',
+            data: {
+                labels: ['3kW Motor', 'Aluminium Housing', 'Check Valves (×2)'],
+                datasets: [{
+                    label: 'Cost (EUR)',
+                    data: [187, 42.5, 16.5],
+                    backgroundColor: [
+                        'rgba(238, 9, 121, 0.8)',
+                        'rgba(245, 87, 108, 0.8)',
+                        'rgba(79, 172, 254, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(238, 9, 121, 1)',
+                        'rgba(245, 87, 108, 1)',
+                        'rgba(79, 172, 254, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 12
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { 
+                        display: true, 
+                        text: 'Model A Cost Breakdown (Total: €246)', 
+                        color: '#fff', 
+                        font: { size: 16, weight: '700' },
+                        padding: 20
+                    }
+                },
+                scales: {
+                    x: { 
+                        ticks: { color: '#fff', callback: v => '€' + v },
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        border: { color: 'rgba(255,255,255,0.2)' }
+                    },
+                    y: { 
+                        ticks: { color: '#fff', font: { size: 13, weight: '600' } },
+                        grid: { display: false },
+                        border: { color: 'rgba(255,255,255,0.2)' }
+                    }
+                }
+            }
+        });
+
+        // Product 2 Chart - Horizontal Bar
+        new Chart(document.getElementById('product2Chart'), {
+            type: 'bar',
+            data: {
+                labels: ['3kW Motors (×2)', 'Aluminium Housing', 'Check Valves (×4)'],
+                datasets: [{
+                    label: 'Cost (EUR)',
+                    data: [374, 42.5, 33],
+                    backgroundColor: [
+                        'rgba(238, 9, 121, 0.8)',
+                        'rgba(245, 87, 108, 0.8)',
+                        'rgba(79, 172, 254, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(238, 9, 121, 1)',
+                        'rgba(245, 87, 108, 1)',
+                        'rgba(79, 172, 254, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 12
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { 
+                        display: true, 
+                        text: 'Model B Cost Breakdown (Total: €449.50)', 
+                        color: '#fff', 
+                        font: { size: 16, weight: '700' },
+                        padding: 20
+                    }
+                },
+                scales: {
+                    x: { 
+                        ticks: { color: '#fff', callback: v => '€' + v },
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        border: { color: 'rgba(255,255,255,0.2)' }
+                    },
+                    y: { 
+                        ticks: { color: '#fff', font: { size: 13, weight: '600' } },
+                        grid: { display: false },
+                        border: { color: 'rgba(255,255,255,0.2)' }
+                    }
+                }
+            }
+        });
+
+        // Motor Price History
+        new Chart(document.getElementById('motorChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Price (EUR)',
+                    data: [198.5, 201, 199.5, 196, 193, 191.5, 190, 189, 188.5, 188, 187.5, 187],
+                    borderColor: chartColors.success,
+                    backgroundColor: 'rgba(56, 239, 125, 0.2)',
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointBackgroundColor: chartColors.success
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { color: '#fff', callback: v => '€' + v }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                }
+            }
+        });
+
+        // Housing Price History
+        new Chart(document.getElementById('housingChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Price (EUR)',
+                    data: [46.8, 45.9, 46.2, 45.1, 44.8, 44.2, 43.9, 43.5, 43.2, 42.8, 42.6, 42.5],
+                    borderColor: chartColors.success,
+                    backgroundColor: 'rgba(56, 239, 125, 0.2)',
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointBackgroundColor: chartColors.success
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { color: '#fff', callback: v => '€' + v }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                }
+            }
+        });
+
+        // Valve Price History
+        new Chart(document.getElementById('valveChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Price (EUR)',
+                    data: [7.5, 7.6, 7.65, 7.75, 7.8, 7.9, 8.0, 8.05, 8.1, 8.15, 8.2, 8.25],
+                    borderColor: chartColors.danger,
+                    backgroundColor: 'rgba(238, 9, 121, 0.2)',
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointBackgroundColor: chartColors.danger
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { color: '#fff', callback: v => '€' + v }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
