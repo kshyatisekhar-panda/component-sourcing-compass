@@ -5,7 +5,7 @@ Type these into Cline during the demo. For internal LLM prompt reference (tool d
 1. List the components in the Atlas Copco LE 3.
 2. Show me the cost breakdown of the Atlas Copco LE 3.
 3. How has the 3 kW IE3 motor's price moved over the last year?
-4. Where can I save money on the Atlas Copco LE 3? Look at the biggest cost components and check Mouser.
+4. Compare the LE 3's 3 kW IE3 motor, brass check valve, and aluminium housing against Mouser side by side. For each give me BOM price, Mouser price, percent savings, stock availability, lead time, and RoHS status. Recommend which suppliers to switch.
 5. Which sourcing changes have the biggest impact across our LE 3 and LE 7 portfolio?
 6. Is the Atlas Copco LE 3 RoHS and REACH compliant for sale in the EU?
 7. What about the US market under Dodd Frank Section 1502?
