@@ -30,7 +30,8 @@ Never hardcode or guess product IDs or component IDs. Always call `list_componen
 | `compare_with_mouser` | User asks if they are overpaying, wants a market price check, or is considering switching supplier. |
 | `cross_product_suggestions` | User asks about portfolio-wide savings or which change has the broadest impact. |
 | `compliance_check` | User asks whether a product/component can be sold in a market, or what regulatory risks exist. |
-| `generate_sourcing_report` | User wants a full analysis, a report to share, or a summary for a meeting. Always prefer this over manually chaining tools when a comprehensive answer is needed. |
+| `generate_sourcing_report` | User wants a full sourcing analysis (cost + compliance + Mouser + trends) for an internal audience or meeting. Output is dashboard style. |
+| `generate_compliance_report` | User wants a formal compliance certificate or customer-facing disclosure document. Output is AI-written prose plus a branded HTML file. Use when the request mentions "certificate", "audit document", "customer disclosure", or "for a customer order". |
 
 ---
 
@@ -61,10 +62,18 @@ Follow these patterns for common question types. Do not ask the user for IDs —
 1. `cross_product_suggestions`
 2. Highlight the top shared component by portfolio cost impact
 
-### "Give me a full report" or "Summarise everything" or "I need something to share"
+### "Give me a full report" or "Summarise everything" or "I need something to share with my team"
 1. `generate_sourcing_report` with the product_id and market
 2. This handles everything in one call — do not chain other tools manually
 3. Tell the user the report has been saved to their Desktop
+
+### "Generate a compliance certificate" or "I need an audit document" or "Customer wants compliance documentation"
+1. `generate_compliance_report` with the product_id and market
+2. The tool produces a chat-ready prose certificate AND a saved branded HTML file under `output/`
+3. In chat: lead with the verdict in one sentence (compliant, warning, or non compliant), name the offending component if any, then tell the user the certificate file has been saved and where
+4. Do NOT paste the full prose certificate again in chat — Cline already shows it from the tool result. Just summarise.
+5. If overall status is non compliant, follow with one sentence on what must change before market entry
+6. If the user asks for both EU and US, call the tool twice; comment briefly on the contrast between markets
 
 ---
 

@@ -151,7 +151,8 @@ export function renderReportHtml(input: ReportInput): string {
     max-width: 880px;
     margin: 40px auto;
     background: #ffffff;
-    box-shadow: 0 4px 28px rgba(5, 78, 90, 0.08);
+    box-shadow: 0 8px 32px rgba(5, 78, 90, 0.10);
+    overflow: hidden;
   }
   .header {
     background: linear-gradient(94deg, var(--gradientColor1) 4%, var(--gradientColor2) 48%, var(--gradientColor3) 96%);
@@ -276,10 +277,10 @@ export function renderReportHtml(input: ReportInput): string {
   }
   .footer {
     padding: 28px 56px 36px 56px;
-    background: #f0f3f5;
+    background: #fafbfc;
     font-size: 12.5px;
     color: var(--ink-soft);
-    border-top: 4px solid var(--accent);
+    border-top: 2px solid var(--accent);
   }
   .footer h4 {
     font-size: 10.5px;
