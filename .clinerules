@@ -32,6 +32,7 @@ Never hardcode or guess product IDs or component IDs. Always call `list_componen
 | `compliance_check` | User asks whether a product/component can be sold in a market, or what regulatory risks exist. |
 | `generate_sourcing_report` | User wants a full sourcing analysis (cost + compliance + Mouser + trends) for an internal audience or meeting. Output is dashboard style. |
 | `generate_compliance_report` | User wants a formal compliance certificate or customer-facing disclosure document. Output is AI-written prose plus a branded HTML file. Use when the request mentions "certificate", "audit document", "customer disclosure", or "for a customer order". |
+| `lookup_external_product` | Fallback when the user asks about a product that is NOT in our internal BOM. Searches the web and reconstructs an illustrative BOM via AI. Result is cached for the session so subsequent tools work on it. Always disclose the result is illustrative. |
 
 ---
 
@@ -67,6 +68,13 @@ Follow these patterns for common question types. Do not ask the user for IDs —
 2. This handles everything in one call — do not chain other tools manually
 3. Tell the user the report has been saved to their Desktop
 
+### User asks about a product not in our BOM (`list_components` returns "unknown product")
+1. Do NOT tell the user the product is not in our database and stop. Instead:
+2. Call `lookup_external_product` with the product name from the user's question
+3. Tell the user clearly that this BOM was reconstructed from public web sources by AI and is illustrative only
+4. The product is now cached for the session, so chain other tools on it as normal (cost_ranked_list, compliance_check, compare_with_mouser)
+5. Always preserve the "illustrative" caveat in any follow up answer about this product
+
 ### "Generate a compliance certificate" or "I need an audit document" or "Customer wants compliance documentation"
 1. `generate_compliance_report` with the product_id and market
 2. The tool produces a chat-ready prose certificate AND a saved branded HTML file under `output/`
@@ -74,6 +82,21 @@ Follow these patterns for common question types. Do not ask the user for IDs —
 4. Do NOT paste the full prose certificate again in chat — Cline already shows it from the tool result. Just summarise.
 5. If overall status is non compliant, follow with one sentence on what must change before market entry
 6. If the user asks for both EU and US, call the tool twice; comment briefly on the contrast between markets
+
+---
+
+## Brand Standards (every generated report)
+
+All generated documents (`generate_sourcing_report`, `generate_compliance_report`, and any future report style tool) MUST use the shared Atlas Copco brand template:
+
+- Official Atlas Copco logo from `docs/assets/atlas-copco-logo.svg`, displayed on the gradient header
+- Primary teal `#054E5A`, accent coral `#F68363`, dark blue `#123F6D` for the header gradient
+- Coral accent bar separating sections
+- Print friendly stylesheet (works in the browser print dialog)
+
+When you deliver a generated report or certificate to the user in chat, briefly tell them the file uses official Atlas Copco branding and is ready to print or share. Do NOT paste the prose body twice if Cline already shows it from the tool result.
+
+If `lookup_external_product` synthesised the product, any report generated for it still uses the brand template, but you must preserve the "illustrative, reconstructed from public sources" caveat in the chat summary.
 
 ---
 

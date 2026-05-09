@@ -1,5 +1,4 @@
 import { readFile } from "node:fs/promises";
-import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { homedir } from "node:os";
 import { loadBom } from "./bom.js";
@@ -7,6 +6,7 @@ import { loadComplianceContext, evaluate } from "./compliance.js";
 import { searchByMfrPartNumber } from "./mouser.js";
 import { USD_TO_EUR } from "./config.js";
 import type { ComponentVerdict } from "./compliance.js";
+import { renderBrandedReport } from "./report-template.js";
 
 const HISTORY_PATH = join(process.cwd(), "data", "price-history.seed.json");
 
@@ -370,16 +370,46 @@ const COMPLIANCE_BG: Record<string, string> = {
   non_compliant: "#FFEBEE",
 };
 
-const LOGO_SVG: string = (() => {
-  try {
-    return readFileSync(
-      join(process.cwd(), "docs", "assets", "atlas-copco-logo.svg"),
-      "utf8",
-    ).replace(/<\?xml[^>]+\?>\s*/, "");
-  } catch {
-    return '<span class="brand-fallback">ATLAS COPCO</span>';
+const SOURCING_BODY_CSS = `
+  .kpi-bar { display: flex; gap: 0; border-bottom: 1px solid #E0E0E0; }
+  .kpi { flex: 1; padding: 20px 24px; border-right: 1px solid #E0E0E0; }
+  .kpi:last-child { border-right: none; }
+  .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: #5a7080; margin-bottom: 4px; font-weight: 700; }
+  .kpi .value { font-size: 22px; font-weight: 700; color: var(--ink); }
+  .kpi .sub { font-size: 12px; color: #888; margin-top: 2px; }
+  section.report-section { padding: 32px 48px; border-bottom: 1px solid #E0E0E0; }
+  section.report-section:last-of-type { border-bottom: none; }
+  section.report-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
   }
-})();
+  section.report-section table { width: 100%; border-collapse: collapse; }
+  section.report-section table tr:last-child td { border-bottom: none; }
+  .recommendations { list-style: none; padding: 0; margin: 0; }
+  .recommendations li {
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    background: #F8F9FA;
+    border-radius: 6px;
+    font-size: 14px;
+    border-left: 4px solid var(--ink);
+  }
+  .saving-box {
+    background: #E8F5E9;
+    border: 1px solid #A5D6A7;
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #2E7D32;
+    font-weight: 600;
+  }
+`;
 
 export function toHtml(data: ReportData): string {
   const date = new Date(data.generated_at).toLocaleDateString("en-GB", {
@@ -473,54 +503,7 @@ export function toHtml(data: ReportData): string {
     })
     .join("\n");
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sourcing Report — ${data.product.name}</title>
-  <style>
-    @media print { body { margin: 0; } .no-print { display: none; } }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f8fa; color: #054E5A; }
-    .page { max-width: 960px; margin: 32px auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 32px rgba(5, 78, 90, 0.10); }
-    .header { background: linear-gradient(94deg, #054E5A 4%, #0A6470 48%, #123F6D 96%); color: #fff; padding: 32px 40px 28px 40px; }
-    .brand-logo { display: inline-block; background: #ffffff; padding: 6px 12px; border-radius: 6px; margin-bottom: 14px; line-height: 0; }
-    .brand-logo svg { height: 34px; width: auto; display: block; }
-    .brand-fallback { font-size: 14px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; }
-    .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
-    .header .meta { font-size: 13px; opacity: .85; }
-    .header .accent { color: #F68363; font-weight: 700; }
-    .accent-bar { height: 4px; background: #F68363; }
-    .kpi-bar { display: flex; gap: 0; border-bottom: 1px solid #E0E0E0; }
-    .kpi { flex: 1; padding: 20px 24px; border-right: 1px solid #E0E0E0; }
-    .kpi:last-child { border-right: none; }
-    .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: #5a7080; margin-bottom: 4px; font-weight: 700; }
-    .kpi .value { font-size: 22px; font-weight: 700; color: #054E5A; }
-    .kpi .sub { font-size: 12px; color: #888; margin-top: 2px; }
-    section { padding: 32px 40px; border-bottom: 1px solid #E0E0E0; }
-    section:last-child { border-bottom: none; }
-    h2 { font-size: 16px; font-weight: 700; color: #054E5A; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #F68363; display: inline-block; }
-    table { width: 100%; border-collapse: collapse; }
-    table tr:last-child td { border-bottom: none; }
-    .recommendations { list-style: none; }
-    .recommendations li { padding: 10px 14px; margin-bottom: 8px; background: #F8F9FA; border-radius: 6px; font-size: 14px; border-left: 4px solid #054E5A; }
-    .saving-box { background: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 8px; padding: 14px 20px; margin-top: 16px; font-size: 14px; color: #2E7D32; font-weight: 600; }
-    .footer { background: #fafbfc; padding: 18px 40px; font-size: 12px; color: #5a7080; text-align: center; border-top: 2px solid #F68363; }
-  </style>
-</head>
-<body>
-<div class="page">
-  <div class="header">
-    <div class="brand-logo">${LOGO_SVG}</div>
-    <h1>${data.product.name}</h1>
-    <div class="meta">
-      Sourcing Report &nbsp;·&nbsp; <span class="accent">${data.market} Market</span> &nbsp;·&nbsp; Generated ${date}
-    </div>
-  </div>
-  <div class="accent-bar"></div>
-
-  <div class="kpi-bar">
+  const body = `<div class="kpi-bar">
     <div class="kpi">
       <div class="label">Total BOM Cost</div>
       <div class="value">€${data.total_bom_cost.toFixed(2)}</div>
@@ -543,7 +526,7 @@ export function toHtml(data: ReportData): string {
     </div>
   </div>
 
-  <section>
+  <section class="report-section">
     <h2>Cost Breakdown</h2>
     <table>
       <thead><tr>${["#", "Component", "Unit Cost", "Qty", "Line Cost", "Share"].map(th).join("")}</tr></thead>
@@ -551,7 +534,7 @@ export function toHtml(data: ReportData): string {
     </table>
   </section>
 
-  <section>
+  <section class="report-section">
     <h2>Compliance — ${data.market} Market</h2>
     <table>
       <thead><tr>${["Component", "Status", "Violations"].map(th).join("")}</tr></thead>
@@ -560,7 +543,7 @@ export function toHtml(data: ReportData): string {
     ${violationDetails ? `<div style="margin-top:24px">${violationDetails}</div>` : ""}
   </section>
 
-  <section>
+  <section class="report-section">
     <h2>Market Price Comparison (Mouser Electronics)</h2>
     <table>
       <thead><tr>${["Component", "BOM Price", "Mouser Price", "Saving", "Recommendation"].map(th).join("")}</tr></thead>
@@ -568,7 +551,7 @@ export function toHtml(data: ReportData): string {
     </table>
   </section>
 
-  <section>
+  <section class="report-section">
     <h2>3-Month Price Trends</h2>
     <table>
       <thead><tr>${["Component", "3 Months Ago", "Today", "Change", "Trend"].map(th).join("")}</tr></thead>
@@ -576,7 +559,7 @@ export function toHtml(data: ReportData): string {
     </table>
   </section>
 
-  <section>
+  <section class="report-section">
     <h2>Key Recommendations</h2>
     <ul class="recommendations">
       ${data.recommendations.map((r) => `<li>${r}</li>`).join("\n")}
@@ -586,15 +569,16 @@ export function toHtml(data: ReportData): string {
         ? `<div class="saving-box">💡 Total potential saving identified: €${data.total_potential_saving_eur.toFixed(2)} per unit across Mouser price comparisons.</div>`
         : ""
     }
-  </section>
+  </section>`;
 
-  <div class="footer">
-    Component Sourcing Compass &nbsp;·&nbsp; Atlas Copco Hackathon PoC &nbsp;·&nbsp; ${date}
-    &nbsp;·&nbsp; <span class="no-print">Print this page to save as PDF</span>
-  </div>
-</div>
-</body>
-</html>`;
+  return renderBrandedReport({
+    documentTitle: `Sourcing Report — ${data.product.name}`,
+    headerTitle: data.product.name,
+    headerMeta: `Sourcing Report &nbsp;·&nbsp; <span class="accent">${data.market} Market</span> &nbsp;·&nbsp; Generated ${date}`,
+    body,
+    bodyCss: SOURCING_BODY_CSS,
+    footerNote: `Component Sourcing Compass · Atlas Copco Hackathon PoC · Generated ${date}. Print this page from your browser to save as PDF.`,
+  });
 }
 
 // ─── File path helper ─────────────────────────────────────────────────────────

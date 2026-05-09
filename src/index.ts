@@ -8,10 +8,11 @@ import { registerCrossProductSuggestions } from "./tools/cross-product-suggestio
 import { registerComplianceCheck } from "./tools/compliance-check.js";
 import { registerGenerateReport } from "./tools/generate-report.js";
 import { registerGenerateComplianceReport } from "./tools/generate-compliance-report.js";
+import { registerLookupExternalProduct } from "./tools/lookup-external-product.js";
 
 const server = new McpServer({
   name: "component-sourcing-compass",
-  version: "0.4.0",
+  version: "0.5.0",
 });
 
 registerListComponents(server);
@@ -22,5 +23,6 @@ registerCrossProductSuggestions(server);
 registerComplianceCheck(server);
 registerGenerateReport(server);
 registerGenerateComplianceReport(server);
+registerLookupExternalProduct(server);
 
 await server.connect(new StdioServerTransport());
