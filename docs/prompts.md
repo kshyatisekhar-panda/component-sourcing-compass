@@ -13,4 +13,3 @@ Type these into Cline during the demo. For internal LLM prompt reference (tool d
 9. Generate a compliance certificate for the Atlas Copco LE 3 for the EU market.
 10. Now generate one for the US market so I can compare.
 11. I am preparing to launch the Atlas Copco LE 3 in Europe. Walk me through cost optimisation opportunities and any RoHS or REACH issues I need to fix before we can ship.
-12. Tell me about the Atlas Copco GA 110 compressor. Look up cost and EU compliance.
