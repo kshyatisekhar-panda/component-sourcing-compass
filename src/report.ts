@@ -103,12 +103,13 @@ export async function buildReportData(
     return c ? [evaluate(c, market, ctx)] : [];
   });
 
-  const overall_compliance: ReportData["overall_compliance"] =
-    compliance_verdicts.some((v) => v.status === "non_compliant")
-      ? "non_compliant"
-      : compliance_verdicts.some((v) => v.status === "warning")
-        ? "warning"
-        : "compliant";
+  const overall_compliance: ReportData["overall_compliance"] = compliance_verdicts.some(
+    (v) => v.status === "non_compliant",
+  )
+    ? "non_compliant"
+    : compliance_verdicts.some((v) => v.status === "warning")
+      ? "warning"
+      : "compliant";
 
   // ── Mouser comparison (top 2 cost components) ───────────────────────────────
   const mouser_comparisons: MouserComparison[] = await Promise.all(
@@ -220,7 +221,9 @@ export async function buildReportData(
   }
 
   if (recommendations.length === 0) {
-    recommendations.push("✅ No critical issues identified. Product is well-optimised for the selected market.");
+    recommendations.push(
+      "✅ No critical issues identified. Product is well-optimised for the selected market.",
+    );
   }
 
   return {
@@ -445,7 +448,8 @@ export function toHtml(data: ReportData): string {
 
   const trendRows = data.price_trends
     .map((t) => {
-      const changeColor = t.trend === "rising" ? "#B71C1C" : t.trend === "falling" ? "#2E7D32" : "#555";
+      const changeColor =
+        t.trend === "rising" ? "#B71C1C" : t.trend === "falling" ? "#2E7D32" : "#555";
       const changeStr = `${t.change_pct > 0 ? "+" : ""}${t.change_pct}%`;
       return `<tr>
       ${td(`<strong>${t.name}</strong>`)}

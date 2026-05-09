@@ -39,5 +39,8 @@ coverage/
 *.db
 data/local/
 
+# Generated reports
+output/
+
 # AI assistant guidance (kept local only)
 CLAUDE.md

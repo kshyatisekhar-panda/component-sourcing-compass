@@ -7,10 +7,11 @@ import { registerCompareWithMouser } from "./tools/compare-with-mouser.js";
 import { registerCrossProductSuggestions } from "./tools/cross-product-suggestions.js";
 import { registerComplianceCheck } from "./tools/compliance-check.js";
 import { registerGenerateReport } from "./tools/generate-report.js";
+import { registerGenerateComplianceReport } from "./tools/generate-compliance-report.js";
 
 const server = new McpServer({
   name: "component-sourcing-compass",
-  version: "0.3.0",
+  version: "0.4.0",
 });
 
 registerListComponents(server);
@@ -20,5 +21,6 @@ registerCompareWithMouser(server);
 registerCrossProductSuggestions(server);
 registerComplianceCheck(server);
 registerGenerateReport(server);
+registerGenerateComplianceReport(server);
 
 await server.connect(new StdioServerTransport());
