@@ -42,6 +42,27 @@
       "preferred_supplier": "ElectroDrive AB"
     },
     {
+      "id": "COMP-MOTOR-5K5",
+      "name": "5.5 kW IE3 three-phase induction motor",
+      "description": "Industrial three-phase IE3 induction motor, 400 V, 50 Hz, B3 foot mount.",
+      "manufacturer": "ElectroDrive AB",
+      "manufacturer_part_number": "ED-M55-400V",
+      "category": "electrical",
+      "specifications": {
+        "power_kw": 5.5,
+        "voltage_v": 400,
+        "phases": 3,
+        "lead_content_pct": 0.05,
+        "mercury_content_pct": 0.0,
+        "cas_numbers": ["7440-50-8", "7439-89-6"],
+        "conflict_minerals_declared": true
+      },
+      "unit_cost": 298.0,
+      "currency": "EUR",
+      "lead_time_days": 28,
+      "preferred_supplier": "ElectroDrive AB"
+    },
+    {
       "id": "COMP-VALVE-CHECK-12",
       "name": "12 mm brass non-return check valve",
       "description": "Brass body 12 mm non-return check valve, 16 bar maximum working pressure.",
@@ -60,6 +81,86 @@
       "currency": "EUR",
       "lead_time_days": 7,
       "preferred_supplier": "FluidCorp"
+    },
+    {
+      "id": "COMP-VALVE-CHECK-12-SS",
+      "name": "12 mm stainless steel non-return check valve (lead-free)",
+      "description": "Stainless steel 316 body 12 mm non-return check valve, 16 bar maximum working pressure. Lead-free RoHS compliant alternative to the brass variant.",
+      "manufacturer": "FluidCorp",
+      "manufacturer_part_number": "FC-CV-12SS",
+      "category": "fluidic",
+      "specifications": {
+        "material": "stainless steel 316",
+        "port_size_mm": 12,
+        "max_pressure_bar": 16,
+        "lead_content_pct": 0.0,
+        "mercury_content_pct": 0.0,
+        "cas_numbers": ["7439-89-6", "7440-47-3", "7440-02-0"]
+      },
+      "unit_cost": 18.5,
+      "currency": "EUR",
+      "lead_time_days": 12,
+      "preferred_supplier": "FluidCorp"
+    },
+    {
+      "id": "COMP-TANK-AR-200",
+      "name": "200 L air receiver tank, carbon steel",
+      "description": "Vertical air receiver, 200 L volume, painted carbon steel, 11 bar maximum working pressure, EN 286-1 certified.",
+      "manufacturer": "MetalWorks GmbH",
+      "manufacturer_part_number": "MW-TANK-200V",
+      "category": "mechanical",
+      "specifications": {
+        "material": "carbon steel",
+        "volume_l": 200,
+        "max_pressure_bar": 11,
+        "lead_content_pct": 0.0,
+        "mercury_content_pct": 0.0,
+        "cas_numbers": ["7439-89-6"]
+      },
+      "unit_cost": 189.0,
+      "currency": "EUR",
+      "lead_time_days": 14,
+      "preferred_supplier": "MetalWorks GmbH"
+    },
+    {
+      "id": "COMP-SWITCH-PR-12",
+      "name": "Pressure switch 9-12 bar, single phase",
+      "description": "Single phase 230 V pressure switch with adjustable cut-out range 9-12 bar, manual reset.",
+      "manufacturer": "ElectroDrive AB",
+      "manufacturer_part_number": "ED-PS-912",
+      "category": "electrical",
+      "specifications": {
+        "voltage_v": 230,
+        "pressure_min_bar": 9,
+        "pressure_max_bar": 12,
+        "lead_content_pct": 0.02,
+        "mercury_content_pct": 0.0,
+        "cas_numbers": ["7440-50-8"],
+        "conflict_minerals_declared": true
+      },
+      "unit_cost": 34.5,
+      "currency": "EUR",
+      "lead_time_days": 7,
+      "preferred_supplier": "ElectroDrive AB"
+    },
+    {
+      "id": "COMP-FILTER-AIR-PA",
+      "name": "Air intake filter, paper element",
+      "description": "Replaceable paper-element air intake filter, M22 thread, suitable for piston compressors up to 10 kW.",
+      "manufacturer": "FluidCorp",
+      "manufacturer_part_number": "FC-AF-M22",
+      "category": "fluidic",
+      "specifications": {
+        "material": "paper element with plastic housing",
+        "thread": "M22",
+        "lead_content_pct": 0.0,
+        "mercury_content_pct": 0.0,
+        "cas_numbers": []
+      },
+      "unit_cost": 12.75,
+      "currency": "EUR",
+      "lead_time_days": 3,
+      "preferred_supplier": "FluidCorp"
     }
   ],
   "products": [
@@ -70,7 +171,10 @@
       "components": [
         { "component_id": "COMP-HOUSING-AL-200", "quantity": 1 },
         { "component_id": "COMP-MOTOR-3KW", "quantity": 1 },
-        { "component_id": "COMP-VALVE-CHECK-12", "quantity": 2 }
+        { "component_id": "COMP-VALVE-CHECK-12", "quantity": 2 },
+        { "component_id": "COMP-TANK-AR-200", "quantity": 1 },
+        { "component_id": "COMP-SWITCH-PR-12", "quantity": 1 },
+        { "component_id": "COMP-FILTER-AIR-PA", "quantity": 1 }
       ]
     },
     {
@@ -79,8 +183,37 @@
       "description": "Higher-output 5.5 kW lubricated piston compressor with twin-pump configuration for sustained workshop duty.",
       "components": [
         { "component_id": "COMP-HOUSING-AL-200", "quantity": 1 },
-        { "component_id": "COMP-MOTOR-3KW", "quantity": 2 },
-        { "component_id": "COMP-VALVE-CHECK-12", "quantity": 4 }
+        { "component_id": "COMP-MOTOR-5K5", "quantity": 1 },
+        { "component_id": "COMP-VALVE-CHECK-12", "quantity": 4 },
+        { "component_id": "COMP-TANK-AR-200", "quantity": 1 },
+        { "component_id": "COMP-SWITCH-PR-12", "quantity": 1 },
+        { "component_id": "COMP-FILTER-AIR-PA", "quantity": 1 }
+      ]
+    },
+    {
+      "id": "PROD-AC-COMP-003",
+      "name": "Atlas Copco LT 3",
+      "description": "High-pressure 3 kW lubricated piston compressor delivering up to 15 bar for specialised industrial applications.",
+      "components": [
+        { "component_id": "COMP-HOUSING-AL-200", "quantity": 1 },
+        { "component_id": "COMP-MOTOR-3KW", "quantity": 1 },
+        { "component_id": "COMP-VALVE-CHECK-12", "quantity": 2 },
+        { "component_id": "COMP-TANK-AR-200", "quantity": 1 },
+        { "component_id": "COMP-SWITCH-PR-12", "quantity": 1 },
+        { "component_id": "COMP-FILTER-AIR-PA", "quantity": 1 }
+      ]
+    },
+    {
+      "id": "PROD-AC-COMP-004",
+      "name": "Atlas Copco LF 7",
+      "description": "Oil-free 5.5 kW piston compressor for clean air applications. Uses lead-free stainless steel valves to maintain RoHS and REACH compliance.",
+      "components": [
+        { "component_id": "COMP-HOUSING-AL-200", "quantity": 1 },
+        { "component_id": "COMP-MOTOR-5K5", "quantity": 1 },
+        { "component_id": "COMP-VALVE-CHECK-12-SS", "quantity": 2 },
+        { "component_id": "COMP-TANK-AR-200", "quantity": 1 },
+        { "component_id": "COMP-SWITCH-PR-12", "quantity": 1 },
+        { "component_id": "COMP-FILTER-AIR-PA", "quantity": 1 }
       ]
     }
   ]
