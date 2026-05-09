@@ -5,10 +5,11 @@ import { registerCostRankedList } from "./tools/cost-ranked-list.js";
 import { registerGetPriceHistory } from "./tools/get-price-history.js";
 import { registerCompareWithMouser } from "./tools/compare-with-mouser.js";
 import { registerCrossProductSuggestions } from "./tools/cross-product-suggestions.js";
+import { registerComplianceCheck } from "./tools/compliance-check.js";
 
 const server = new McpServer({
   name: "component-sourcing-compass",
-  version: "0.2.0",
+  version: "0.3.0",
 });
 
 registerListComponents(server);
@@ -16,5 +17,6 @@ registerCostRankedList(server);
 registerGetPriceHistory(server);
 registerCompareWithMouser(server);
 registerCrossProductSuggestions(server);
+registerComplianceCheck(server);
 
 await server.connect(new StdioServerTransport());

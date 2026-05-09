@@ -101,29 +101,60 @@ For the proof of concept the data layer is JSON fixtures. Production swaps them 
 
 A separate Python data-generation track produces the fixtures, validated against schemas in [data/schemas/](data/schemas/). See [docs/project-and-brainstorm.md](docs/project-and-brainstorm.md) for the full PoC charter, scope, and team decisions.
 
+## Data sources
+
+Each tool answers from a specific data source. Live external APIs are called where they exist; everything else is a JSON fixture in [data/](data/) with a clear production refresh path.
+
+| Data | File | Source | Live? | Production refresh path |
+| ---- | ---- | ------ | ----- | ----------------------- |
+| BOM (components, products) | [data/bom.seed.json](data/bom.seed.json) | Hand authored fictitious BOM, approved by the challenge owner | static | Customer ERP or PLM (SAP, Teamcenter) |
+| Price history (monthly, per component) | [data/price-history.seed.json](data/price-history.seed.json) | Hand authored, internally consistent with the BOM | static | Internal procurement or spend database |
+| Mouser pricing, availability, RoHS status | called inline by `compare_with_mouser` | **[Mouser Electronics API](https://www.mouser.com/api-hub/)** | **live**, with a recorded mock fallback | Same. Direct Mouser API |
+| Web supplier intelligence (used as fallback) | called inline by `compare_with_mouser` when Mouser returns no listing | **[Tavily Search API](https://tavily.com/)** | **live** | Same, or Mouser only |
+| **EU SVHC Candidate List** (REACH Article 33) | [data/svhc-cache.json](data/svhc-cache.json) | **Curated subset of the [ECHA SVHC Candidate List](https://echa.europa.eu/candidate-list-table)**, snapshot dated `2026-01-15`. 34 substances with CAS, name, reason for inclusion, and the date ECHA added the substance. | static cache | Scheduled refresh from `echa.europa.eu/candidate-list-table`. The file's `note` documents the operator contract. |
+| Compliance rules (RoHS, REACH, Dodd Frank) | [data/compliance-rules.seed.json](data/compliance-rules.seed.json) | Hand authored from the named regulations | static | Regulatory rules database, internal compliance team feed, or a commercial source such as Z2Data |
+
+### Why the SVHC list lives in `svhc-cache.json` rather than being fetched on each call
+
+ECHA publishes the SVHC list as XML or Excel on their candidate list page rather than as a JSON API. For a demo, a snapshot is faster, more reliable on stage, and easy to verify against the public source. The file's top level `source` and `snapshot_date` fields make the provenance explicit in every tool response. When `compliance_check` returns a violation, the response includes the same `svhc_source_snapshot` so consumers can audit where the rule came from.
+
+In production the cache would be refreshed on a schedule (for example weekly) by a small fetcher that pulls the official list and re emits it in the format `data/svhc-cache.json` already uses.
+
 ## Project layout
 
 ```
 src/
-├── index.ts                  MCP server bootstrap
-├── bom.ts                    BOM types and loader
+├── index.ts                       MCP server bootstrap, registers all tools
+├── bom.ts                         BOM types and loader
+├── compliance.ts                  rule engine (RoHS, REACH, conflict minerals, SVHC matching)
+├── mouser.ts                      Mouser API client + recorded fallback
+├── tavily.ts                      Tavily web search fallback
+├── config.ts, tool-response.ts    shared helpers
 └── tools/
-    └── list-components.ts    list_components tool
+    ├── list-components.ts
+    ├── cost-ranked-list.ts
+    ├── get-price-history.ts
+    ├── compare-with-mouser.ts
+    ├── cross-product-suggestions.ts
+    └── compliance-check.ts
 data/
-├── bom.seed.json             BOM fixture
-└── schemas/
-    └── bom.schema.json       JSON Schema (TS ↔ Python contract)
+├── bom.seed.json                  BOM fixture
+├── price-history.seed.json        monthly price history per component
+├── compliance-rules.seed.json     regulatory rules (EU and US)
+├── svhc-cache.json                ECHA SVHC Candidate List snapshot (REACH)
+└── schemas/                       JSON Schema contracts for every fixture above
 docs/
-└── project-and-brainstorm.md PoC charter, brainstorm, decisions
+└── project-and-brainstorm.md      PoC charter, brainstorm, decisions
 ```
 
 ## Roadmap
 
-| Phase | Capability                             | Status      |
-| ----: | :------------------------------------- | :---------- |
-|     1 | `list_components`                      | ✅ shipped   |
-|     2 | `price_history`, `compare_with_mouser` | up next     |
-|     3 | `compliance_flags`, `taric_lookup`     | stretch     |
+| Phase | Capability                                                  | Status      |
+| ----: | :---------------------------------------------------------- | :---------- |
+|     1 | `list_components`                                           | ✅ shipped   |
+|     2 | `cost_ranked_list`, `get_price_history`, `compare_with_mouser`, `cross_product_suggestions` | ✅ shipped   |
+|     3 | `compliance_check` (RoHS, REACH, Dodd-Frank 1502)           | ✅ shipped   |
+|     - | `taric_lookup`, automated assurance docs                    | stretch     |
 
 ## Team
 

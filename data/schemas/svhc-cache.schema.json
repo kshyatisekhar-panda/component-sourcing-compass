@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ECHA SVHC Candidate List cache",
+  "description": "Snapshot of the ECHA SVHC Candidate List for REACH Article 33 compliance checks. Production refreshes this file on a schedule from echa.europa.eu/candidate-list-table. The source URL and snapshot_date travel through every compliance_check tool response so consumers can audit provenance.",
+  "type": "object",
+  "required": ["source", "regulation", "snapshot_date", "substances"],
+  "properties": {
+    "source": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the official ECHA Candidate List page."
+    },
+    "regulation": {
+      "type": "string",
+      "description": "Citation of the underlying regulation."
+    },
+    "snapshot_date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date this snapshot was taken from ECHA."
+    },
+    "note": { "type": "string" },
+    "substances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["cas", "name", "reason_for_inclusion", "date_added"],
+        "properties": {
+          "cas": {
+            "type": "string",
+            "pattern": "^[0-9]+\\-[0-9]{2}\\-[0-9]$",
+            "description": "CAS Registry Number, e.g. 7439-92-1."
+          },
+          "name": {
+            "type": "string",
+            "description": "Common substance name."
+          },
+          "reason_for_inclusion": {
+            "type": "string",
+            "description": "Brief reason ECHA listed the substance (carcinogenic, PBT, toxic for reproduction, etc.)."
+          },
+          "date_added": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date ECHA added the substance to the Candidate List."
+          }
+        }
+      }
+    }
+  }
+}

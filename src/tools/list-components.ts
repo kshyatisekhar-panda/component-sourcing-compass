@@ -42,4 +42,3 @@ export function registerListComponents(server: McpServer): void {
     },
   );
 }
-

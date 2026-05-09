@@ -1,0 +1,57 @@
+{
+  "rules": [
+    {
+      "id": "EU-ROHS-LEAD",
+      "market": "EU",
+      "regulation": "RoHS Directive 2011/65/EU",
+      "title": "Lead (Pb) content must not exceed 0.1% by weight",
+      "description": "EU RoHS restricts lead in homogeneous materials to 1000 ppm (0.1%). Components above this threshold cannot be placed on the EU market without an exemption.",
+      "severity": "blocking",
+      "check": {
+        "type": "max_threshold",
+        "spec_field": "lead_content_pct",
+        "threshold": 0.1,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "EU-ROHS-MERCURY",
+      "market": "EU",
+      "regulation": "RoHS Directive 2011/65/EU",
+      "title": "Mercury (Hg) content must not exceed 0.1% by weight",
+      "description": "EU RoHS restricts mercury in homogeneous materials to 0.1%.",
+      "severity": "blocking",
+      "check": {
+        "type": "max_threshold",
+        "spec_field": "mercury_content_pct",
+        "threshold": 0.1,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "EU-REACH-SVHC",
+      "market": "EU",
+      "regulation": "REACH (EC) No 1907/2006, Article 33",
+      "title": "Substances of Very High Concern (SVHC) — disclosure required",
+      "description": "REACH Article 33 requires manufacturers to disclose presence of substances on the ECHA SVHC Candidate List above 0.1% (w/w) to recipients of the article. Cross-references each component's declared CAS numbers against the live SVHC cache (data/svhc-cache.json).",
+      "severity": "warning",
+      "check": {
+        "type": "svhc_substance_match",
+        "spec_field": "cas_numbers"
+      }
+    },
+    {
+      "id": "US-CONFLICT-MINERALS",
+      "market": "US",
+      "regulation": "Dodd-Frank Section 1502",
+      "title": "Conflict minerals (3TG) due-diligence declaration required",
+      "description": "Components containing tin, tantalum, tungsten, or gold (3TG) require a due-diligence declaration filed with the SEC. Applies to electrical and electronic components.",
+      "applies_to_categories": ["electrical", "electronics"],
+      "severity": "blocking",
+      "check": {
+        "type": "required_declaration",
+        "spec_field": "conflict_minerals_declared"
+      }
+    }
+  ]
+}

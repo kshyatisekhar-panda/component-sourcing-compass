@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Price history",
+  "description": "Per component monthly price history. Top level keys are component IDs (matching the BOM), values are arrays of dated price points sorted ascending by date. Components without an entry can still be queried but get_price_history will return an error indicating no history is available.",
+  "type": "object",
+  "additionalProperties": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": ["date", "unit_cost", "currency"],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date (YYYY-MM-DD), typically the first day of the month."
+        },
+        "unit_cost": { "type": "number", "minimum": 0 },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "ISO 4217 currency code."
+        }
+      }
+    }
+  }
+}

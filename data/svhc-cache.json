@@ -1,0 +1,212 @@
+{
+  "source": "https://echa.europa.eu/candidate-list-table",
+  "regulation": "REACH (EC) No 1907/2006, Article 33 — Candidate List of Substances of Very High Concern for Authorisation",
+  "snapshot_date": "2026-01-15",
+  "note": "Curated subset of the ECHA SVHC Candidate List for the PoC. Production would refresh this file on a schedule from echa.europa.eu. Substance names, CAS numbers, and inclusion dates are publicly available regulatory data; reasons for inclusion are summarised — verify against the official entry for compliance decisions.",
+  "substances": [
+    {
+      "cas": "7439-92-1",
+      "name": "Lead",
+      "reason_for_inclusion": "Toxic for reproduction; specific target organ toxicity after repeated exposure",
+      "date_added": "2018-06-27"
+    },
+    {
+      "cas": "7758-97-6",
+      "name": "Lead chromate",
+      "reason_for_inclusion": "Carcinogenic; toxic for reproduction",
+      "date_added": "2010-06-18"
+    },
+    {
+      "cas": "1317-36-8",
+      "name": "Lead monoxide (lead oxide)",
+      "reason_for_inclusion": "Toxic for reproduction",
+      "date_added": "2014-06-16"
+    },
+    {
+      "cas": "1344-37-2",
+      "name": "Lead sulfochromate yellow",
+      "reason_for_inclusion": "Carcinogenic; toxic for reproduction",
+      "date_added": "2010-06-18"
+    },
+    {
+      "cas": "12656-85-8",
+      "name": "Lead chromate molybdate sulphate red",
+      "reason_for_inclusion": "Carcinogenic; toxic for reproduction",
+      "date_added": "2010-06-18"
+    },
+    {
+      "cas": "7440-43-9",
+      "name": "Cadmium",
+      "reason_for_inclusion": "Carcinogenic; specific target organ toxicity",
+      "date_added": "2013-12-16"
+    },
+    {
+      "cas": "1306-19-0",
+      "name": "Cadmium oxide",
+      "reason_for_inclusion": "Carcinogenic; specific target organ toxicity",
+      "date_added": "2013-12-16"
+    },
+    {
+      "cas": "1306-23-6",
+      "name": "Cadmium sulphide",
+      "reason_for_inclusion": "Carcinogenic; specific target organ toxicity",
+      "date_added": "2014-06-16"
+    },
+    {
+      "cas": "7439-97-6",
+      "name": "Mercury",
+      "reason_for_inclusion": "Specific target organ toxicity; PBT/vPvB",
+      "date_added": "2018-01-15"
+    },
+    {
+      "cas": "117-81-7",
+      "name": "Bis(2-ethylhexyl) phthalate (DEHP)",
+      "reason_for_inclusion": "Toxic for reproduction; endocrine disruptor",
+      "date_added": "2008-10-28"
+    },
+    {
+      "cas": "84-74-2",
+      "name": "Dibutyl phthalate (DBP)",
+      "reason_for_inclusion": "Toxic for reproduction; endocrine disruptor",
+      "date_added": "2008-10-28"
+    },
+    {
+      "cas": "85-68-7",
+      "name": "Benzyl butyl phthalate (BBP)",
+      "reason_for_inclusion": "Toxic for reproduction; endocrine disruptor",
+      "date_added": "2008-10-28"
+    },
+    {
+      "cas": "84-69-5",
+      "name": "Diisobutyl phthalate (DIBP)",
+      "reason_for_inclusion": "Toxic for reproduction",
+      "date_added": "2010-01-13"
+    },
+    {
+      "cas": "10043-35-3",
+      "name": "Boric acid",
+      "reason_for_inclusion": "Toxic for reproduction",
+      "date_added": "2010-06-18"
+    },
+    {
+      "cas": "1330-43-4",
+      "name": "Disodium tetraborate, anhydrous",
+      "reason_for_inclusion": "Toxic for reproduction",
+      "date_added": "2010-06-18"
+    },
+    {
+      "cas": "1303-86-2",
+      "name": "Diboron trioxide",
+      "reason_for_inclusion": "Toxic for reproduction",
+      "date_added": "2010-12-15"
+    },
+    {
+      "cas": "25637-99-4",
+      "name": "Hexabromocyclododecane (HBCDD)",
+      "reason_for_inclusion": "PBT (persistent, bioaccumulative, toxic)",
+      "date_added": "2008-10-28"
+    },
+    {
+      "cas": "1763-23-1",
+      "name": "Perfluorooctane sulfonic acid (PFOS)",
+      "reason_for_inclusion": "PBT/vPvB",
+      "date_added": "2013-06-20"
+    },
+    {
+      "cas": "335-67-1",
+      "name": "Perfluorooctanoic acid (PFOA)",
+      "reason_for_inclusion": "Toxic for reproduction; PBT",
+      "date_added": "2013-12-19"
+    },
+    {
+      "cas": "335-76-2",
+      "name": "Perfluorodecanoic acid (PFDA)",
+      "reason_for_inclusion": "Toxic for reproduction; PBT",
+      "date_added": "2017-07-07"
+    },
+    {
+      "cas": "115-96-8",
+      "name": "Tris(2-chloroethyl) phosphate (TCEP)",
+      "reason_for_inclusion": "Toxic for reproduction",
+      "date_added": "2012-12-19"
+    },
+    {
+      "cas": "107-06-2",
+      "name": "1,2-Dichloroethane (EDC)",
+      "reason_for_inclusion": "Carcinogenic",
+      "date_added": "2010-12-15"
+    },
+    {
+      "cas": "79-01-6",
+      "name": "Trichloroethylene",
+      "reason_for_inclusion": "Carcinogenic",
+      "date_added": "2010-12-15"
+    },
+    {
+      "cas": "120-12-7",
+      "name": "Anthracene",
+      "reason_for_inclusion": "PBT",
+      "date_added": "2008-10-28"
+    },
+    {
+      "cas": "7789-12-0",
+      "name": "Sodium dichromate",
+      "reason_for_inclusion": "Carcinogenic; mutagenic; toxic for reproduction",
+      "date_added": "2008-10-28"
+    },
+    {
+      "cas": "7789-00-6",
+      "name": "Potassium chromate",
+      "reason_for_inclusion": "Carcinogenic; mutagenic",
+      "date_added": "2010-06-18"
+    },
+    {
+      "cas": "1333-82-0",
+      "name": "Chromium trioxide",
+      "reason_for_inclusion": "Carcinogenic; mutagenic",
+      "date_added": "2010-12-15"
+    },
+    {
+      "cas": "7646-79-9",
+      "name": "Cobalt dichloride",
+      "reason_for_inclusion": "Carcinogenic; toxic for reproduction",
+      "date_added": "2008-10-28"
+    },
+    {
+      "cas": "10124-43-3",
+      "name": "Cobalt sulphate",
+      "reason_for_inclusion": "Carcinogenic; toxic for reproduction",
+      "date_added": "2010-06-18"
+    },
+    {
+      "cas": "513-79-1",
+      "name": "Cobalt(II) carbonate",
+      "reason_for_inclusion": "Carcinogenic; toxic for reproduction",
+      "date_added": "2010-12-15"
+    },
+    {
+      "cas": "7789-06-2",
+      "name": "Strontium chromate",
+      "reason_for_inclusion": "Carcinogenic",
+      "date_added": "2010-12-15"
+    },
+    {
+      "cas": "80-05-7",
+      "name": "Bisphenol A",
+      "reason_for_inclusion": "Toxic for reproduction; endocrine disruptor",
+      "date_added": "2017-01-12"
+    },
+    {
+      "cas": "140-66-9",
+      "name": "4-tert-octylphenol",
+      "reason_for_inclusion": "Endocrine disruptor",
+      "date_added": "2011-12-19"
+    },
+    {
+      "cas": "101-77-9",
+      "name": "4,4'-Diaminodiphenylmethane (MDA)",
+      "reason_for_inclusion": "Carcinogenic",
+      "date_added": "2008-10-28"
+    }
+  ]
+}
