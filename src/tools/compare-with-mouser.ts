@@ -26,7 +26,7 @@ export function registerCompareWithMouser(server: McpServer): void {
         );
       }
 
-      const mouser = await searchByMfrPartNumber(component.manufacturer_part_number);
+      const mouser = await searchByMfrPartNumber(component);
 
       // Mouser returned no live listing — try Tavily web search before falling back to mock
       if (!mouser.found) {

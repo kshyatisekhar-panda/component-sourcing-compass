@@ -128,7 +128,7 @@ export async function buildReportData(
           recommendation: "No manufacturer part number available.",
         };
       }
-      const result = await searchByMfrPartNumber(c.manufacturer_part_number);
+      const result = await searchByMfrPartNumber(c);
       if (!result.found) {
         return {
           component_id: c.id,
