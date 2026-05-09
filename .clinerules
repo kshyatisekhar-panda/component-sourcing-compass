@@ -85,6 +85,21 @@ Follow these patterns for common question types. Do not ask the user for IDs —
 
 ---
 
+## Brand Standards (every generated report)
+
+All generated documents (`generate_sourcing_report`, `generate_compliance_report`, and any future report style tool) MUST use the shared Atlas Copco brand template:
+
+- Official Atlas Copco logo from `docs/assets/atlas-copco-logo.svg`, displayed on the gradient header
+- Primary teal `#054E5A`, accent coral `#F68363`, dark blue `#123F6D` for the header gradient
+- Coral accent bar separating sections
+- Print friendly stylesheet (works in the browser print dialog)
+
+When you deliver a generated report or certificate to the user in chat, briefly tell them the file uses official Atlas Copco branding and is ready to print or share. Do NOT paste the prose body twice if Cline already shows it from the tool result.
+
+If `lookup_external_product` synthesised the product, any report generated for it still uses the brand template, but you must preserve the "illustrative, reconstructed from public sources" caveat in the chat summary.
+
+---
+
 ## Output Rules
 
 - **Lead with the answer**, then the supporting data. Not the other way around.
