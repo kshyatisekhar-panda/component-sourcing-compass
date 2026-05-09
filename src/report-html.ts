@@ -26,20 +26,10 @@ const MARKET_LABEL: Record<ReportInput["market"], string> = {
 
 const LOGO_SVG: string = (() => {
   try {
-    let svg = readFileSync(
+    return readFileSync(
       join(process.cwd(), "docs", "assets", "atlas-copco-logo.svg"),
       "utf8",
-    );
-    svg = svg
-      .replace(/<\?xml[^>]+\?>\s*/, "")
-      .replace(/<!--[\s\S]*?-->\s*/g, "")
-      .replace(/\sxmlns:inkscape="[^"]+"/g, "")
-      .replace(/\sxmlns:svg="[^"]+"/g, "")
-      .replace(/\sinkscape:[a-zA-Z\-]+="[^"]*"/g, "")
-      .replace(/fill:#ffffff;fill-opacity:1/g, "fill:#ffffff;fill-opacity:0")
-      .replace(/fill:#1f4a58/g, "fill:#ffffff")
-      .replace(/fill:#9fa7b4/g, "fill:rgba(255,255,255,0.85)");
-    return svg;
+    ).replace(/<\?xml[^>]+\?>\s*/, "");
   } catch {
     return '<span class="brand-fallback">ATLAS COPCO</span>';
   }
@@ -161,10 +151,13 @@ export function renderReportHtml(input: ReportInput): string {
   }
   .brand-logo {
     display: inline-block;
-    height: 38px;
+    background: #ffffff;
+    padding: 8px 14px;
+    border-radius: 6px;
     margin-bottom: 18px;
+    line-height: 0;
   }
-  .brand-logo svg { height: 100%; width: auto; display: block; }
+  .brand-logo svg { height: 38px; width: auto; display: block; }
   .brand-fallback {
     font-size: 14px;
     font-weight: 700;

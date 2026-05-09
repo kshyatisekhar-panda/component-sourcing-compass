@@ -4,6 +4,7 @@ import { loadBom } from "../bom.js";
 import { evaluate, loadComplianceContext } from "../compliance.js";
 import { chat } from "../llm.js";
 import { renderReportHtml, writeReportHtml } from "../report-html.js";
+import { openInDefaultApp } from "../open-file.js";
 import { text } from "../tool-response.js";
 
 const MODEL = "anthropic/claude-sonnet-4.5";
@@ -126,6 +127,7 @@ export function registerGenerateComplianceReport(server: McpServer): void {
 
       const fileName = `compliance-${product.id}-${market}-${reportDate}.html`;
       const htmlPath = await writeReportHtml(html, fileName);
+      openInDefaultApp(htmlPath);
 
       return text({
         scope: { type: "product", id: product.id, name: product.name },

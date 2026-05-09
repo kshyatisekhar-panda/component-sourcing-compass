@@ -3,6 +3,7 @@ import { z } from "zod";
 import { writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import { buildReportData, toMarkdown, toHtml, reportFilePath } from "../report.js";
+import { openInDefaultApp } from "../open-file.js";
 import { text } from "../tool-response.js";
 
 export function registerGenerateReport(server: McpServer): void {
@@ -29,6 +30,7 @@ export function registerGenerateReport(server: McpServer): void {
 
       await mkdir(dirname(filePath), { recursive: true });
       await writeFile(filePath, html, "utf8");
+      openInDefaultApp(filePath);
 
       const footer = [
         "",

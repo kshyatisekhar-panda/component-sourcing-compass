@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { homedir } from "node:os";
 import { loadBom } from "./bom.js";
@@ -369,6 +370,17 @@ const COMPLIANCE_BG: Record<string, string> = {
   non_compliant: "#FFEBEE",
 };
 
+const LOGO_SVG: string = (() => {
+  try {
+    return readFileSync(
+      join(process.cwd(), "docs", "assets", "atlas-copco-logo.svg"),
+      "utf8",
+    ).replace(/<\?xml[^>]+\?>\s*/, "");
+  } catch {
+    return '<span class="brand-fallback">ATLAS COPCO</span>';
+  }
+})();
+
 export function toHtml(data: ReportData): string {
   const date = new Date(data.generated_at).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -380,7 +392,7 @@ export function toHtml(data: ReportData): string {
     `<span style="background:${COMPLIANCE_BG[status]};color:${COMPLIANCE_COLOR[status]};padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">${COMPLIANCE_EMOJI[status]} ${status.replace("_", " ")}</span>`;
 
   const th = (s: string) =>
-    `<th style="background:#002B5C;color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-size:13px">${s}</th>`;
+    `<th style="background:#054E5A;color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-size:13px">${s}</th>`;
   const td = (s: string, extra = "") =>
     `<td style="padding:10px 14px;border-bottom:1px solid #E0E0E0;font-size:13px;${extra}">${s}</td>`;
 
@@ -470,38 +482,43 @@ export function toHtml(data: ReportData): string {
   <style>
     @media print { body { margin: 0; } .no-print { display: none; } }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #F5F5F5; color: #212121; }
-    .page { max-width: 960px; margin: 32px auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.1); }
-    .header { background: #002B5C; color: #fff; padding: 32px 40px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f8fa; color: #054E5A; }
+    .page { max-width: 960px; margin: 32px auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 32px rgba(5, 78, 90, 0.10); }
+    .header { background: linear-gradient(94deg, #054E5A 4%, #0A6470 48%, #123F6D 96%); color: #fff; padding: 32px 40px 28px 40px; }
+    .brand-logo { display: inline-block; background: #ffffff; padding: 6px 12px; border-radius: 6px; margin-bottom: 14px; line-height: 0; }
+    .brand-logo svg { height: 34px; width: auto; display: block; }
+    .brand-fallback { font-size: 14px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; }
     .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
-    .header .meta { font-size: 13px; opacity: .75; }
-    .header .orange { color: #FF671F; font-weight: 700; }
+    .header .meta { font-size: 13px; opacity: .85; }
+    .header .accent { color: #F68363; font-weight: 700; }
+    .accent-bar { height: 4px; background: #F68363; }
     .kpi-bar { display: flex; gap: 0; border-bottom: 1px solid #E0E0E0; }
     .kpi { flex: 1; padding: 20px 24px; border-right: 1px solid #E0E0E0; }
     .kpi:last-child { border-right: none; }
-    .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: #777; margin-bottom: 4px; }
-    .kpi .value { font-size: 22px; font-weight: 700; color: #002B5C; }
+    .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: #5a7080; margin-bottom: 4px; font-weight: 700; }
+    .kpi .value { font-size: 22px; font-weight: 700; color: #054E5A; }
     .kpi .sub { font-size: 12px; color: #888; margin-top: 2px; }
     section { padding: 32px 40px; border-bottom: 1px solid #E0E0E0; }
     section:last-child { border-bottom: none; }
-    h2 { font-size: 16px; font-weight: 700; color: #002B5C; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #FF671F; display: inline-block; }
+    h2 { font-size: 16px; font-weight: 700; color: #054E5A; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #F68363; display: inline-block; }
     table { width: 100%; border-collapse: collapse; }
     table tr:last-child td { border-bottom: none; }
     .recommendations { list-style: none; }
-    .recommendations li { padding: 10px 14px; margin-bottom: 8px; background: #F8F9FA; border-radius: 6px; font-size: 14px; border-left: 4px solid #002B5C; }
+    .recommendations li { padding: 10px 14px; margin-bottom: 8px; background: #F8F9FA; border-radius: 6px; font-size: 14px; border-left: 4px solid #054E5A; }
     .saving-box { background: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 8px; padding: 14px 20px; margin-top: 16px; font-size: 14px; color: #2E7D32; font-weight: 600; }
-    .footer { background: #F5F5F5; padding: 16px 40px; font-size: 12px; color: #999; text-align: center; }
+    .footer { background: #fafbfc; padding: 18px 40px; font-size: 12px; color: #5a7080; text-align: center; border-top: 2px solid #F68363; }
   </style>
 </head>
 <body>
 <div class="page">
   <div class="header">
-    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:.6;margin-bottom:8px">Atlas Copco — Component Sourcing Compass</div>
+    <div class="brand-logo">${LOGO_SVG}</div>
     <h1>${data.product.name}</h1>
     <div class="meta">
-      Sourcing Report &nbsp;·&nbsp; <span class="orange">${data.market} Market</span> &nbsp;·&nbsp; Generated ${date}
+      Sourcing Report &nbsp;·&nbsp; <span class="accent">${data.market} Market</span> &nbsp;·&nbsp; Generated ${date}
     </div>
   </div>
+  <div class="accent-bar"></div>
 
   <div class="kpi-bar">
     <div class="kpi">
