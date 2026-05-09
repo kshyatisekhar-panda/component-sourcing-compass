@@ -194,6 +194,7 @@ The verdict data is the same shape returned by `compliance_check` so the LLM get
 - `compliance_check`: Per component verdict for EU (RoHS, REACH SVHC) or US (Dodd Frank 1502).
 - `generate_sourcing_report`: Full sourcing brief (cost, compliance, Mouser, trends) saved as HTML to Desktop.
 - `generate_compliance_report`: Formal AI written compliance certificate, branded HTML. Requires `OPENROUTER_API_KEY`.
+- `lookup_external_product`: Fallback for products not in our BOM. Tavily search plus AI reconstruction, cached for the session. Output marked illustrative.
 
 ### Compliance certificate system prompt
 
@@ -237,3 +238,4 @@ Customer is placing an order for {product_name} in {market}.
 9. Generate a compliance certificate for Atlas Compressor Model A for the EU market.
 10. Now generate one for the US market.
 11. I am preparing to launch Atlas Compressor Model A in Europe. Walk me through cost optimisation opportunities and any compliance issues I need to fix before we can ship.
+12. Tell me about the Atlas Copco GA110 compressor. Look up cost and EU compliance.

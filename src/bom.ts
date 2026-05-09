@@ -34,7 +34,35 @@ export type Bom = {
   products: Product[];
 };
 
-export async function loadBom(): Promise<Bom> {
+let baseBomCache: Bom | null = null;
+
+async function getBaseBom(): Promise<Bom> {
+  if (baseBomCache) return baseBomCache;
   const raw = await readFile(BOM_PATH, "utf8");
-  return JSON.parse(raw) as Bom;
+  baseBomCache = JSON.parse(raw) as Bom;
+  return baseBomCache;
+}
+
+const externalProducts = new Map<string, { product: Product; components: Component[] }>();
+
+export function cacheExternalProduct(entry: { product: Product; components: Component[] }): void {
+  externalProducts.set(entry.product.id, entry);
+}
+
+export function getExternalProduct(
+  id: string,
+): { product: Product; components: Component[] } | undefined {
+  return externalProducts.get(id);
+}
+
+export async function loadBom(): Promise<Bom> {
+  const base = await getBaseBom();
+  if (externalProducts.size === 0) return base;
+
+  const extraComponents = [...externalProducts.values()].flatMap((e) => e.components);
+  const extraProducts = [...externalProducts.values()].map((e) => e.product);
+  return {
+    components: [...base.components, ...extraComponents],
+    products: [...base.products, ...extraProducts],
+  };
 }

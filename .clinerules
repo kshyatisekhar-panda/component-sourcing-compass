@@ -32,6 +32,7 @@ Never hardcode or guess product IDs or component IDs. Always call `list_componen
 | `compliance_check` | User asks whether a product/component can be sold in a market, or what regulatory risks exist. |
 | `generate_sourcing_report` | User wants a full sourcing analysis (cost + compliance + Mouser + trends) for an internal audience or meeting. Output is dashboard style. |
 | `generate_compliance_report` | User wants a formal compliance certificate or customer-facing disclosure document. Output is AI-written prose plus a branded HTML file. Use when the request mentions "certificate", "audit document", "customer disclosure", or "for a customer order". |
+| `lookup_external_product` | Fallback when the user asks about a product that is NOT in our internal BOM. Searches the web and reconstructs an illustrative BOM via AI. Result is cached for the session so subsequent tools work on it. Always disclose the result is illustrative. |
 
 ---
 
@@ -66,6 +67,13 @@ Follow these patterns for common question types. Do not ask the user for IDs —
 1. `generate_sourcing_report` with the product_id and market
 2. This handles everything in one call — do not chain other tools manually
 3. Tell the user the report has been saved to their Desktop
+
+### User asks about a product not in our BOM (`list_components` returns "unknown product")
+1. Do NOT tell the user the product is not in our database and stop. Instead:
+2. Call `lookup_external_product` with the product name from the user's question
+3. Tell the user clearly that this BOM was reconstructed from public web sources by AI and is illustrative only
+4. The product is now cached for the session, so chain other tools on it as normal (cost_ranked_list, compliance_check, compare_with_mouser)
+5. Always preserve the "illustrative" caveat in any follow up answer about this product
 
 ### "Generate a compliance certificate" or "I need an audit document" or "Customer wants compliance documentation"
 1. `generate_compliance_report` with the product_id and market
