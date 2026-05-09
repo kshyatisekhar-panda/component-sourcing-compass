@@ -1,4 +1,5 @@
 import { writeFile, mkdir } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { ComponentVerdict } from "./compliance.js";
 
@@ -23,6 +24,27 @@ const MARKET_LABEL: Record<ReportInput["market"], string> = {
   US: "United States",
 };
 
+const LOGO_SVG: string = (() => {
+  try {
+    let svg = readFileSync(
+      join(process.cwd(), "docs", "assets", "atlas-copco-logo.svg"),
+      "utf8",
+    );
+    svg = svg
+      .replace(/<\?xml[^>]+\?>\s*/, "")
+      .replace(/<!--[\s\S]*?-->\s*/g, "")
+      .replace(/\sxmlns:inkscape="[^"]+"/g, "")
+      .replace(/\sxmlns:svg="[^"]+"/g, "")
+      .replace(/\sinkscape:[a-zA-Z\-]+="[^"]*"/g, "")
+      .replace(/fill:#ffffff;fill-opacity:1/g, "fill:#ffffff;fill-opacity:0")
+      .replace(/fill:#1f4a58/g, "fill:#ffffff")
+      .replace(/fill:#9fa7b4/g, "fill:rgba(255,255,255,0.85)");
+    return svg;
+  } catch {
+    return '<span class="brand-fallback">ATLAS COPCO</span>';
+  }
+})();
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -33,10 +55,20 @@ function escapeHtml(s: string): string {
 }
 
 function proseToHtml(prose: string): string {
-  return prose
-    .trim()
+  let s = escapeHtml(prose).trim();
+  s = s.replace(/^#{1,3}\s+(.+?)$/gm, '<h4 class="md-section">$1</h4>');
+  s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  s = s.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, "<em>$1</em>");
+
+  return s
     .split(/\n\s*\n/)
-    .map((para) => `<p>${escapeHtml(para.trim()).replace(/\n/g, "<br/>")}</p>`)
+    .map((block) => {
+      const trimmed = block.trim();
+      if (!trimmed) return "";
+      if (trimmed.startsWith("<h4")) return trimmed;
+      return `<p>${trimmed.replace(/\n/g, "<br/>")}</p>`;
+    })
+    .filter(Boolean)
     .join("\n");
 }
 
@@ -59,7 +91,7 @@ function findingsTable(verdicts: ComponentVerdict[]): string {
       const violationCell = violationCount === 0 ? "None" : `${violationCount}`;
       const statusClass = `status-${v.status}`;
       return `<tr>
-  <td>${escapeHtml(v.component_id)}</td>
+  <td><code>${escapeHtml(v.component_id)}</code></td>
   <td>${escapeHtml(v.component_name)}</td>
   <td><span class="status-pill ${statusClass}">${escapeHtml(STATUS_LABEL[v.status])}</span></td>
   <td>${v.rules_evaluated}</td>
@@ -95,12 +127,13 @@ export function renderReportHtml(input: ReportInput): string {
 <title>${escapeHtml(titleText)}</title>
 <style>
   :root {
-    --gradientColor1: #FF671F;
-    --gradientColor2: #F89A4F;
-    --gradientColor3: #002B5C;
-    --ink: #002B5C;
-    --ink-soft: #4a5b78;
-    --accent: #FF671F;
+    --gradientColor1: #054E5A;
+    --gradientColor2: #0A6470;
+    --gradientColor3: #123F6D;
+    --ink: #054E5A;
+    --ink-soft: #5a7080;
+    --accent: #F68363;
+    --beige: #E1B77E;
     --rule: #e6e9ef;
     --bg: #f7f8fa;
   }
@@ -112,39 +145,48 @@ export function renderReportHtml(input: ReportInput): string {
     color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.65;
   }
   .page {
     max-width: 880px;
     margin: 40px auto;
     background: #ffffff;
-    box-shadow: 0 4px 28px rgba(20, 54, 91, 0.08);
+    box-shadow: 0 4px 28px rgba(5, 78, 90, 0.08);
   }
   .header {
     background: linear-gradient(94deg, var(--gradientColor1) 4%, var(--gradientColor2) 48%, var(--gradientColor3) 96%);
     color: #ffffff;
-    padding: 44px 56px 36px 56px;
+    padding: 36px 56px 32px 56px;
   }
-  .brand {
-    font-size: 13px;
+  .brand-logo {
+    display: inline-block;
+    height: 38px;
+    margin-bottom: 18px;
+  }
+  .brand-logo svg { height: 100%; width: auto; display: block; }
+  .brand-fallback {
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 5px;
     text-transform: uppercase;
-    opacity: 0.95;
   }
   .title {
-    font-size: 34px;
+    font-size: 32px;
     font-weight: 600;
-    margin: 14px 0 6px 0;
+    margin: 6px 0 6px 0;
     letter-spacing: 0.2px;
   }
   .subtitle {
     font-size: 14px;
     opacity: 0.92;
-    max-width: 600px;
+    max-width: 620px;
+  }
+  .accent-bar {
+    height: 4px;
+    background: var(--accent);
   }
   .body {
-    padding: 38px 56px 28px 56px;
+    padding: 36px 56px 28px 56px;
   }
   .meta-grid {
     display: grid;
@@ -176,9 +218,9 @@ export function renderReportHtml(input: ReportInput): string {
     border-radius: 4px;
     text-transform: uppercase;
   }
-  .status-compliant { background: #e3f5e3; color: #2c7a2c; }
-  .status-warning { background: #fff7d6; color: #9a6e00; }
-  .status-non_compliant { background: #fde2de; color: #a8231a; }
+  .status-compliant { background: #dff5e1; color: #1f6b35; }
+  .status-warning { background: #fdf3d0; color: #8c6500; }
+  .status-non_compliant { background: #fde2dc; color: #a8231a; }
   .prose {
     margin-bottom: 32px;
   }
@@ -186,6 +228,17 @@ export function renderReportHtml(input: ReportInput): string {
     margin: 0 0 14px 0;
     color: var(--ink);
   }
+  .prose strong { color: var(--ink); font-weight: 600; }
+  .md-section {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 26px 0 10px 0;
+    padding: 0;
+  }
+  .md-section:first-child { margin-top: 0; }
   .findings {
     width: 100%;
     border-collapse: collapse;
@@ -207,13 +260,26 @@ export function renderReportHtml(input: ReportInput): string {
     border-bottom: 1px solid var(--rule);
     vertical-align: top;
   }
-  .findings tr:last-child td { border-bottom: none; }
-  .footer {
-    padding: 28px 56px 36px 56px;
-    background: #f0f2f6;
+  .findings code {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
     font-size: 12.5px;
     color: var(--ink-soft);
-    border-top: 4px solid var(--gradientColor1);
+  }
+  .findings tr:last-child td { border-bottom: none; }
+  .findings-title {
+    font-size: 11px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0 0 12px 0;
+  }
+  .footer {
+    padding: 28px 56px 36px 56px;
+    background: #f0f3f5;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    border-top: 4px solid var(--accent);
   }
   .footer h4 {
     font-size: 10.5px;
@@ -230,11 +296,12 @@ export function renderReportHtml(input: ReportInput): string {
   .footer li {
     margin-bottom: 4px;
   }
-  .footer a { color: var(--ink); }
+  .footer a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .footer a:hover { border-bottom-color: var(--accent); }
   .src-note { color: var(--ink-soft); font-size: 11.5px; }
   .footer .disclosure {
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.65;
   }
   @media print {
     body { background: #ffffff; }
@@ -247,10 +314,11 @@ export function renderReportHtml(input: ReportInput): string {
 <body>
 <div class="page">
   <header class="header">
-    <div class="brand">Atlas Copco</div>
+    <div class="brand-logo">${LOGO_SVG}</div>
     <h1 class="title">Compliance Certificate</h1>
     <p class="subtitle">Verification of regulatory compliance for product placement on the ${escapeHtml(MARKET_LABEL[input.market])} market.</p>
   </header>
+  <div class="accent-bar"></div>
   <section class="body">
     <div class="meta-grid">
       <div>
@@ -273,7 +341,7 @@ export function renderReportHtml(input: ReportInput): string {
     <div class="prose">
 ${proseToHtml(input.prose)}
     </div>
-    <h3 style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin:0 0 12px 0;">Per Component Findings</h3>
+    <h3 class="findings-title">Per Component Findings</h3>
 ${findingsTable(input.verdicts)}
   </section>
   <footer class="footer">

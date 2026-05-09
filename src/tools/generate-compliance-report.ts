@@ -12,17 +12,22 @@ const SYSTEM_PROMPT = `You are a senior compliance officer at Atlas Copco writin
 
 Never invent component names, dates, CAS numbers, or substances beyond what is in the verdict data.
 
-Write 300 to 450 words. Use plain prose, short paragraphs, no markdown headings, no bullet lists. Use full sentences.
+Output rules:
+- Write 300 to 450 words.
+- Do NOT include a top level title. Do NOT repeat the product name, market, report date, or status as a metadata block. The document already shows these in its header. Begin directly with the first section.
+- Use exactly four section headings, in this order, using markdown level two (##): "Scope of Assessment", "Findings Summary", "Detailed Findings", "Conclusion".
+- Under each heading write flowing prose in full sentences. Do not use bullet lists.
+- Use **bold** sparingly to highlight a key finding (a substance name, a specific percentage, or the overall verdict). Do not bold whole sentences.
 
-Structure the certificate as four paragraphs:
-1. Scope statement: which product, which market, which regulations were evaluated, the date the assessment was performed.
-2. Findings summary: how many components evaluated, overall status, key numbers.
-3. Detailed findings: for each non compliant component, the specific violation, the regulation cited, the substance or property at issue with measurements, and the recommended remediation. For compliant components, a brief attestation.
+Section content:
+1. Scope of Assessment: which product, which market, which regulations were evaluated, the date the assessment was performed, and the data sources used (specifically reference the ECHA SVHC Candidate List snapshot date when EU).
+2. Findings Summary: how many components evaluated, overall status, the headline number that explains the verdict.
+3. Detailed Findings: for each non compliant or warning component, the specific violation, the regulation cited by full reference, the substance or property at issue with its measurement, and the recommended remediation. For compliant components, a brief attestation by name.
 4. Conclusion: a single clear statement of whether the product can be placed on the market in the named jurisdiction at the named date, and any disclosure obligations or remediation required.
 
-If the overall status is non_compliant, the conclusion must say the product cannot be placed on the market until the violations are remediated.
-If the overall status is warning, the conclusion must say the product is saleable but documentation gaps remain.
-If the overall status is compliant, the conclusion must give clear positive attestation.`;
+If overall status is non_compliant, the conclusion must say the product cannot be placed on the market until the violations are remediated.
+If overall status is warning, the conclusion must say the product is saleable but documentation gaps remain.
+If overall status is compliant, the conclusion must give clear positive attestation.`;
 
 export function registerGenerateComplianceReport(server: McpServer): void {
   server.tool(
