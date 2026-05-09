@@ -7,10 +7,14 @@ import { USD_TO_EUR } from "../config.js";
 import { text } from "../tool-response.js";
 
 export function registerCompareWithMouser(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     "compare_with_mouser",
-    "Looks up a component on Mouser Electronics and compares the market price against the current BOM price. Returns savings or premium per unit, stock availability, lead time, and a sourcing recommendation. Use this when the user asks whether they are overpaying, whether there are cheaper alternatives, or what Mouser charges for a component. If Mouser has no listing, automatically falls back to a Tavily web search for market pricing context.",
-    { component_id: z.string().describe("Component ID to compare (e.g. COMP-MOTOR-3KW)") },
+    {
+      title: "Compare with Mouser",
+      description: "Looks up a component on Mouser Electronics and compares the market price against the current BOM price. Returns savings or premium per unit, stock availability, lead time, and a sourcing recommendation. Use this when the user asks whether they are overpaying, whether there are cheaper alternatives, or what Mouser charges for a component. If Mouser has no listing, automatically falls back to a Tavily web search for market pricing context.",
+      inputSchema: { component_id: z.string().describe("Component ID to compare (e.g. COMP-MOTOR-3KW)") },
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
     async ({ component_id }) => {
       const bom = await loadBom();
       const component = bom.components.find((c) => c.id === component_id);

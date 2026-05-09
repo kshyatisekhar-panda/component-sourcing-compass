@@ -16,15 +16,19 @@ async function loadHistory(): Promise<PriceHistory> {
 }
 
 export function registerGetPriceHistory(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     "get_price_history",
-    "Returns monthly price history for a component over the last 3 months or 1 year, with trend direction and percentage change. Use this when the user asks about price trends, cost evolution, or whether a component is getting more expensive. A good follow-up after cost_ranked_list — check whether the highest-cost components are trending up (rising risk) or down (opportunity to renegotiate).",
     {
-      component_id: z.string().describe("Component ID (e.g. COMP-MOTOR-3KW)"),
-      period: z
-        .enum(["3m", "1y"])
-        .default("1y")
-        .describe("Look-back window: '3m' = last 3 months, '1y' = last 12 months (default)"),
+      title: "Price History",
+      description: "Returns monthly price history for a component over the last 3 months or 1 year, with trend direction and percentage change. Use this when the user asks about price trends, cost evolution, or whether a component is getting more expensive. A good follow-up after cost_ranked_list — check whether the highest-cost components are trending up (rising risk) or down (opportunity to renegotiate).",
+      inputSchema: {
+        component_id: z.string().describe("Component ID (e.g. COMP-MOTOR-3KW)"),
+        period: z
+          .enum(["3m", "1y"])
+          .default("1y")
+          .describe("Look-back window: '3m' = last 3 months, '1y' = last 12 months (default)"),
+      },
+      annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async ({ component_id, period }) => {
       const [bom, history] = await Promise.all([loadBom(), loadHistory()]);

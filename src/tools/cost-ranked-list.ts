@@ -4,10 +4,14 @@ import { loadBom } from "../bom.js";
 import { text } from "../tool-response.js";
 
 export function registerCostRankedList(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     "cost_ranked_list",
-    "Returns components for a product ranked by total cost contribution (unit_cost × quantity), with each line's share of total BOM cost. Use this when the user asks which components drive cost, what the BOM cost breakdown is, or where to focus cost-reduction efforts. Follow up with compare_with_mouser on the top-ranked components to find savings.",
-    { product_id: z.string().describe("Product ID to analyse (e.g. PROD-AC-COMP-001)") },
+    {
+      title: "Cost Ranked List",
+      description: "Returns components for a product ranked by total cost contribution (unit_cost × quantity), with each line's share of total BOM cost. Use this when the user asks which components drive cost, what the BOM cost breakdown is, or where to focus cost-reduction efforts. Follow up with compare_with_mouser on the top-ranked components to find savings.",
+      inputSchema: { product_id: z.string().describe("Product ID to analyse (e.g. PROD-AC-COMP-001)") },
+      annotations: { readOnlyHint: true, openWorldHint: false },
+    },
     async ({ product_id }) => {
       const bom = await loadBom();
       const product = bom.products.find((p) => p.id === product_id);

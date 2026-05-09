@@ -4,16 +4,20 @@ import { loadBom } from "../bom.js";
 import { text } from "../tool-response.js";
 
 export function registerListComponents(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     "list_components",
-    "Entry point for all sourcing queries. Call this first to discover valid product IDs and component IDs before calling any other tool. With no arguments, returns the full component catalogue. With product_id, returns only the components in that product with quantities. Always call this when you do not already have a component_id or product_id.",
     {
-      product_id: z
-        .string()
-        .optional()
-        .describe(
-          "Optional product id (e.g. PROD-AC-COMP-001). Filters results to a single product.",
-        ),
+      title: "List Components",
+      description: "Entry point for all sourcing queries. Call this first to discover valid product IDs and component IDs before calling any other tool. With no arguments, returns the full component catalogue. With product_id, returns only the components in that product with quantities. Always call this when you do not already have a component_id or product_id.",
+      inputSchema: {
+        product_id: z
+          .string()
+          .optional()
+          .describe(
+            "Optional product id (e.g. PROD-AC-COMP-001). Filters results to a single product.",
+          ),
+      },
+      annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async ({ product_id }) => {
       const bom = await loadBom();

@@ -3,10 +3,13 @@ import { loadBom } from "../bom.js";
 import { text } from "../tool-response.js";
 
 export function registerCrossProductSuggestions(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     "cross_product_suggestions",
-    "Analyses components shared across multiple products and ranks them by total portfolio cost impact. Use this when the user asks about portfolio-wide optimisation, cross-product savings, or which single sourcing decision would have the broadest impact. A saving on a shared component multiplies across every product that uses it — this tool surfaces those leverage points.",
-    {},
+    {
+      title: "Cross-Product Optimisation",
+      description: "Analyses components shared across multiple products and ranks them by total portfolio cost impact. Use this when the user asks about portfolio-wide optimisation, cross-product savings, or which single sourcing decision would have the broadest impact. A saving on a shared component multiplies across every product that uses it — this tool surfaces those leverage points.",
+      annotations: { readOnlyHint: true, openWorldHint: false },
+    },
     async () => {
       const bom = await loadBom();
 
