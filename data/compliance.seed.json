@@ -1,0 +1,51 @@
+{
+  "COMP-HOUSING-AL-200": {
+    "overall_status": "compliant",
+    "rohs": {
+      "status": "compliant",
+      "note": "Aluminium housing with no restricted substances identified. Compliant with RoHS 2 (2011/65/EU)."
+    },
+    "reach": {
+      "status": "compliant",
+      "svhc_substances": [],
+      "note": "No SVHC substances identified in aluminium alloy."
+    },
+    "conflict_minerals": {
+      "status": "low_risk",
+      "note": "Aluminium is not a conflict mineral under OECD guidelines."
+    }
+  },
+  "COMP-MOTOR-3KW": {
+    "overall_status": "flag",
+    "rohs": {
+      "status": "compliant",
+      "note": "Motor assembly meets RoHS 2 requirements per manufacturer declaration (ED-M3K-400V datasheet rev. 4.1)."
+    },
+    "reach": {
+      "status": "flag",
+      "svhc_substances": ["Neodymium (Nd) — rare earth permanent magnet material"],
+      "note": "Neodymium is listed on the EU Critical Raw Materials (CRM) list 2023. Over 85% of global neodymium production is in China, creating a single-source supply resilience risk. Not an SVHC restriction today but flagged for supply chain due diligence."
+    },
+    "conflict_minerals": {
+      "status": "review_required",
+      "note": "Rare earth elements in permanent magnets require supply chain due diligence under OECD Due Diligence Guidance."
+    }
+  },
+  "COMP-VALVE-CHECK-12": {
+    "overall_status": "flag",
+    "rohs": {
+      "status": "unverified",
+      "note": "Brass alloy grade not declared on FC-CV-12B datasheet. Standard leaded brass (CuZn39Pb3) contains up to 3% lead — this exceeds the RoHS 0.1% limit for homogeneous materials.",
+      "action_required": "Request RoHS compliance declaration from FluidCorp. If switching supplier, specify lead-free brass alloy (e.g. CuZn21Si3P) explicitly in the purchase order."
+    },
+    "reach": {
+      "status": "flag",
+      "svhc_substances": ["Lead (Pb) — potential presence in brass alloy"],
+      "note": "Lead is a REACH SVHC (Annex XIV candidate). If lead content exceeds 0.1% by weight in any homogeneous material, Article 33 communication obligations apply to downstream customers."
+    },
+    "conflict_minerals": {
+      "status": "low_risk",
+      "note": "Brass (copper/zinc alloy) is not a conflict mineral."
+    }
+  }
+}

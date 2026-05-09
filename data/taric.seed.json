@@ -1,0 +1,32 @@
+{
+  "COMP-HOUSING-AL-200": {
+    "commodity_code": "7616 99 90",
+    "cn_code": "7616999090",
+    "description": "Other articles of aluminium",
+    "standard_import_duty_pct": 4.5,
+    "anti_dumping": null,
+    "origin_notes": "No preferential arrangements or anti-dumping measures currently active for aluminium articles from any major origin."
+  },
+  "COMP-MOTOR-3KW": {
+    "commodity_code": "8501 52 20",
+    "cn_code": "8501522000",
+    "description": "AC motors, multi-phase, output >750 W to 7.5 kW",
+    "standard_import_duty_pct": 2.7,
+    "anti_dumping": {
+      "active": true,
+      "affected_origins": ["CN"],
+      "duty_rate_pct": 73.4,
+      "regulation": "Council Implementing Regulation (EU) 2019/1379",
+      "note": "Anti-dumping duty of 73.4% applies to AC motors originating in China. Current BOM supplier (ElectroDrive AB, Sweden) is not affected. Verify country of origin carefully before switching to any lower-cost alternative."
+    },
+    "origin_notes": "Swedish-origin motors are not subject to anti-dumping measures. Chinese-origin motors face a combined effective duty of 76.1% (2.7% standard + 73.4% anti-dumping)."
+  },
+  "COMP-VALVE-CHECK-12": {
+    "commodity_code": "8481 30 91",
+    "cn_code": "8481309100",
+    "description": "Check (non-return) valves, of copper alloy",
+    "standard_import_duty_pct": 2.7,
+    "anti_dumping": null,
+    "origin_notes": "No active anti-dumping measures for copper alloy check valves."
+  }
+}
