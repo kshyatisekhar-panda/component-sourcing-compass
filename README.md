@@ -10,9 +10,9 @@ Built for the **Cline AI-Assisted Enterprise Coding Hackathon** on the Atlas Cop
 
 A typical sourcing question today involves cross-referencing component data across ERP, PLM, supplier portals, datasheets, and regulatory feeds. Work that takes weeks. This project exposes that same data through a small set of MCP tools so an LLM can answer the question conversationally:
 
-> **You:** What components are in Atlas Compressor Model A and what does it cost?
+> **You:** What components are in the Atlas Copco LE 3 and what does it cost?
 >
-> **Cline:** Model A contains an aluminium housing (1×, €42.50), a 3kW three-phase motor (1×, €187.00), and 12mm brass check valves (2×, €8.25 each). BOM cost: €245.50.
+> **Cline:** The LE 3 contains an aluminium housing (1×, €42.50), a 3kW three-phase motor (1×, €187.00), and 12mm brass check valves (2×, €8.25 each). BOM cost: €245.50.
 
 Today the server answers BOM lookups. Phase 2 adds price history and Mouser comparisons; Phase 3 adds compliance flags and TARIC lookups. The chat surface stays the same as tools are layered in.
 
@@ -20,7 +20,7 @@ Today the server answers BOM lookups. Phase 2 adds price history and Mouser comp
 
 You only need two ideas to follow the rest of this repo.
 
-**BOM (Bill of Materials).** The parts list for a manufactured product, with quantities. Like an ingredients list on a recipe, but for a compressor: *Atlas Compressor Model A = 1× aluminium housing, 1× 3kW motor, 2× check valves*. The BOM is the spine of every question this server answers. Every cost figure, supplier alternative, and compliance check is anchored to a component on a BOM. Our seed BOM lives in [data/bom.seed.json](data/bom.seed.json) and its shape is defined by [data/schemas/bom.schema.json](data/schemas/bom.schema.json).
+**BOM (Bill of Materials).** The parts list for a manufactured product, with quantities. Like an ingredients list on a recipe, but for a compressor: *Atlas Copco LE 3 = 1× aluminium housing, 1× 3kW motor, 2× check valves*. The BOM is the spine of every question this server answers. Every cost figure, supplier alternative, and compliance check is anchored to a component on a BOM. Our seed BOM lives in [data/bom.seed.json](data/bom.seed.json) and its shape is defined by [data/schemas/bom.schema.json](data/schemas/bom.schema.json).
 
 **MCP (Model Context Protocol).** A standard interface that lets LLM apps call external services. Think USB for AI. This repo is an *MCP server*: it exposes a small set of *tools* (functions like `list_components`) that an *MCP client* (Cline, Claude Desktop, any compatible host) can call when the user asks a question. We wrote the tools; the LLM does the language understanding.
 

@@ -65,8 +65,8 @@
   "products": [
     {
       "id": "PROD-AC-COMP-001",
-      "name": "Atlas Compressor Model A",
-      "description": "Mid-range industrial air compressor.",
+      "name": "Atlas Copco LE 3",
+      "description": "Single-stage 3 kW lubricated piston compressor for light industrial and workshop use.",
       "components": [
         { "component_id": "COMP-HOUSING-AL-200", "quantity": 1 },
         { "component_id": "COMP-MOTOR-3KW", "quantity": 1 },
@@ -75,8 +75,8 @@
     },
     {
       "id": "PROD-AC-COMP-002",
-      "name": "Atlas Compressor Model B",
-      "description": "High-output variant of Model A.",
+      "name": "Atlas Copco LE 7",
+      "description": "Higher-output 5.5 kW lubricated piston compressor with twin-pump configuration for sustained workshop duty.",
       "components": [
         { "component_id": "COMP-HOUSING-AL-200", "quantity": 1 },
         { "component_id": "COMP-MOTOR-3KW", "quantity": 2 },
