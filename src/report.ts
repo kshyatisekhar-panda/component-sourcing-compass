@@ -43,6 +43,7 @@ type PriceTrend = {
   current: number;
   change_pct: number;
   trend: "rising" | "falling" | "stable";
+  series: number[];
 };
 
 export type ReportData = {
@@ -184,6 +185,7 @@ export async function buildReportData(
         current: last.unit_cost,
         change_pct,
         trend: change_pct > 1 ? "rising" : change_pct < -1 ? "falling" : "stable",
+        series: filtered.map((p) => p.unit_cost),
       },
     ];
   });
@@ -409,7 +411,69 @@ const SOURCING_BODY_CSS = `
     color: #2E7D32;
     font-weight: 600;
   }
+  .cost-bars { margin-bottom: 24px; }
+  .cost-bar-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 70px 90px;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .cost-bar-label { color: var(--ink); font-weight: 500; }
+  .cost-bar-track {
+    background: #f0f3f5;
+    height: 18px;
+    border-radius: 9px;
+    overflow: hidden;
+  }
+  .cost-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gradientColor1), var(--gradientColor2));
+    border-radius: 9px;
+  }
+  .cost-bar-pct { text-align: right; color: var(--ink); font-weight: 600; }
+  .cost-bar-eur { text-align: right; color: var(--ink-soft); font-size: 12px; }
+  .sparkline-cell { width: 130px; }
+  .sparkline-cell svg { display: block; }
 `;
+
+function costBarsHtml(lines: ReportData["cost_breakdown"]): string {
+  if (lines.length === 0) return "";
+  return `<div class="cost-bars">
+    ${lines
+      .map(
+        (l) => `<div class="cost-bar-row">
+          <div class="cost-bar-label">${l.name}</div>
+          <div class="cost-bar-track"><div class="cost-bar-fill" style="width:${Math.max(2, l.cost_share_pct)}%"></div></div>
+          <div class="cost-bar-pct">${l.cost_share_pct}%</div>
+          <div class="cost-bar-eur">€${l.line_cost.toFixed(2)}</div>
+        </div>`,
+      )
+      .join("\n")}
+  </div>`;
+}
+
+function sparklineSvg(series: number[]): string {
+  if (series.length < 2) return "";
+  const w = 120;
+  const h = 30;
+  const min = Math.min(...series);
+  const max = Math.max(...series);
+  const range = max - min || 1;
+  const stepX = w / (series.length - 1);
+  const points = series.map((v, i) => {
+    const x = i * stepX;
+    const y = h - ((v - min) / range) * (h - 4) - 2;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const linePath = `M ${points.join(" L ")}`;
+  const areaPath = `${linePath} L ${w},${h} L 0,${h} Z`;
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+    <path d="${areaPath}" fill="#F68363" fill-opacity="0.14"/>
+    <path d="${linePath}" stroke="#F68363" stroke-width="2" fill="none" stroke-linejoin="round"/>
+  </svg>`;
+}
 
 export function toHtml(data: ReportData): string {
   const date = new Date(data.generated_at).toLocaleDateString("en-GB", {
@@ -495,6 +559,7 @@ export function toHtml(data: ReportData): string {
       const changeStr = `${t.change_pct > 0 ? "+" : ""}${t.change_pct}%`;
       return `<tr>
       ${td(`<strong>${t.name}</strong>`)}
+      ${td(`<div class="sparkline-cell">${sparklineSvg(t.series)}</div>`)}
       ${td(`€${t.three_months_ago.toFixed(2)}`)}
       ${td(`€${t.current.toFixed(2)}`)}
       ${td(`<span style="color:${changeColor};font-weight:600">${changeStr}</span>`)}
@@ -528,6 +593,7 @@ export function toHtml(data: ReportData): string {
 
   <section class="report-section">
     <h2>Cost Breakdown</h2>
+    ${costBarsHtml(data.cost_breakdown)}
     <table>
       <thead><tr>${["#", "Component", "Unit Cost", "Qty", "Line Cost", "Share"].map(th).join("")}</tr></thead>
       <tbody>${costRows}</tbody>
@@ -554,7 +620,7 @@ export function toHtml(data: ReportData): string {
   <section class="report-section">
     <h2>3-Month Price Trends</h2>
     <table>
-      <thead><tr>${["Component", "3 Months Ago", "Today", "Change", "Trend"].map(th).join("")}</tr></thead>
+      <thead><tr>${["Component", "Trend", "3 Months Ago", "Today", "Change", "Direction"].map(th).join("")}</tr></thead>
       <tbody>${trendRows}</tbody>
     </table>
   </section>
