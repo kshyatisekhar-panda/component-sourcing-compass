@@ -8,18 +8,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* Atlas Copco brand palette */
-    --ink:    #054E5A;  /* Atlas Copco teal, primary brand */
+    --ink:    #0F1923;
     --paper:  #F7F3EE;
     --warm:   #EDE8E1;
-    --clay:   #F68363;  /* Atlas Copco coral, primary accent */
-    --clay-lt:#FBA889;
-    --sage:   #123F6D;  /* Atlas Copco dark blue, secondary */
-    --sage-lt:#2C5A8A;
-    --sand:   #E1B77E;  /* Atlas Copco beige */
-    --mist:   #A1A9B4;  /* Atlas Copco gray */
+    --clay:   #C4794A;
+    --clay-lt:#E8956A;
+    --sage:   #4A7C6F;
+    --sage-lt:#6BA898;
+    --sand:   #D4C4A8;
+    --mist:   #8FA8A0;
     --cream:  #FAF7F2;
-    --gold:   #E1B77E;
+    --gold:   #D4A84B;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,7 +38,7 @@
     padding: 1.2rem 3rem;
     background: rgba(247,243,238,0.88);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(246,131,99,0.15);
+    border-bottom: 1px solid rgba(196,121,74,0.15);
   }
   .nav-logo {
     font-family: 'Playfair Display', serif;
@@ -75,7 +74,7 @@
   .section-title em { font-style: italic; color: var(--clay); }
   .section-subtitle {
     font-size: 1.05rem; font-weight: 300; line-height: 1.75;
-    color: rgba(5,78,90,0.6); max-width: 640px;
+    color: rgba(15,25,35,0.6); max-width: 640px;
   }
   .section-header { margin-bottom: 4rem; }
 
@@ -104,12 +103,12 @@
   .hero-bg {
     position: absolute; inset: 0; z-index: 0;
     background:
-      radial-gradient(ellipse 70% 60% at 80% 20%, rgba(246,131,99,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(18,63,109,0.1) 0%, transparent 55%);
+      radial-gradient(ellipse 70% 60% at 80% 20%, rgba(196,121,74,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(74,124,111,0.1) 0%, transparent 55%);
   }
   .hero-texture {
     position: absolute; inset: 0; z-index: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F68363' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C4794A' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
   .hero-inner { position: relative; z-index: 1; max-width: 860px; text-align: center; }
   .hero-eyebrow {
@@ -129,7 +128,7 @@
   .hero h1 em { font-style: italic; color: var(--clay); }
   .hero-sub {
     font-size: 1.15rem; font-weight: 300; line-height: 1.75;
-    color: rgba(5,78,90,0.62); max-width: 600px; margin: 0 auto 3rem;
+    color: rgba(15,25,35,0.62); max-width: 600px; margin: 0 auto 3rem;
   }
   .hero-cta { display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
   .btn-primary {
@@ -140,7 +139,7 @@
   }
   .btn-primary:hover { background: var(--clay); }
   .btn-ghost {
-    padding: 0.9rem 2.2rem; border: 1.5px solid rgba(5,78,90,0.2); color: var(--ink);
+    padding: 0.9rem 2.2rem; border: 1.5px solid rgba(15,25,35,0.2); color: var(--ink);
     font-size: 0.82rem; font-weight: 500; letter-spacing: 0.05em;
     text-transform: uppercase; border-radius: 0.25rem;
     text-decoration: none; transition: border-color 0.2s, color 0.2s;
@@ -150,11 +149,11 @@
     position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
     display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
     font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(5,78,90,0.35);
+    color: rgba(15,25,35,0.35);
   }
   .scroll-line {
     width: 1px; height: 2.8rem;
-    background: linear-gradient(to bottom, rgba(5,78,90,0.25), transparent);
+    background: linear-gradient(to bottom, rgba(15,25,35,0.25), transparent);
     animation: drop 2s ease-in-out infinite;
   }
   @keyframes drop { 0%,100%{opacity:1;transform:scaleY(1)} 50%{opacity:0.3;transform:scaleY(0.5)} }
@@ -221,7 +220,7 @@
   .user-tag {
     font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em;
     padding: 0.3rem 0.8rem; border-radius: 2rem;
-    background: rgba(246,131,99,0.18); color: var(--clay-lt);
+    background: rgba(196,121,74,0.18); color: var(--clay-lt);
   }
   .user-divider {
     height: 1px; background: rgba(255,255,255,0.07); margin: 1.5rem 0;
@@ -237,7 +236,7 @@
     margin-bottom: 1.2rem; line-height: 1.2;
   }
   .user-copy p {
-    font-size: 0.95rem; line-height: 1.78; color: rgba(5,78,90,0.6);
+    font-size: 0.95rem; line-height: 1.78; color: rgba(15,25,35,0.6);
     margin-bottom: 1.1rem;
   }
   .user-copy p:last-child { margin-bottom: 0; }
@@ -249,7 +248,7 @@
     border-radius: 0.4rem; padding: 3rem;
     position: relative; overflow: hidden;
   }
-  .goal-card.a { background: var(--warm); border: 1px solid rgba(246,131,99,0.15); }
+  .goal-card.a { background: var(--warm); border: 1px solid rgba(196,121,74,0.15); }
   .goal-card.b { background: var(--ink); }
   .goal-card-label {
     font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
@@ -264,7 +263,7 @@
   .goal-card.a h3 { color: var(--ink); }
   .goal-card.b h3 { color: var(--paper); }
   .goal-card p { font-size: 0.92rem; line-height: 1.75; }
-  .goal-card.a p { color: rgba(5,78,90,0.6); }
+  .goal-card.a p { color: rgba(15,25,35,0.6); }
   .goal-card.b p { color: rgba(247,243,238,0.55); }
   .goal-card.b p + p { margin-top: 1rem; }
   .goal-pill {
@@ -279,19 +278,19 @@
     font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
     margin-top: 0.1rem;
   }
-  .goal-card.a .goal-pill-sub { color: rgba(5,78,90,0.4); }
+  .goal-card.a .goal-pill-sub { color: rgba(15,25,35,0.4); }
   .goal-card.b .goal-pill-sub { color: rgba(247,243,238,0.35); }
 
   /* ── SECTION 4: QUESTIONS ── */
   .questions { background: var(--warm); }
   .q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .q-card {
-    background: white; border: 1px solid rgba(246,131,99,0.12);
+    background: white; border: 1px solid rgba(196,121,74,0.12);
     border-radius: 0.4rem; padding: 1.8rem 2rem;
     transition: box-shadow 0.25s, transform 0.25s;
   }
   .q-card:hover {
-    box-shadow: 0 6px 28px rgba(5,78,90,0.08);
+    box-shadow: 0 6px 28px rgba(15,25,35,0.08);
     transform: translateY(-2px);
   }
   .q-num {
@@ -306,7 +305,7 @@
   .q-text::before { content: '"'; color: var(--clay); font-size: 1.3rem; line-height: 0; vertical-align: -0.2em; margin-right: 0.1rem; }
   .q-text::after  { content: '"'; color: var(--clay); font-size: 1.3rem; line-height: 0; vertical-align: -0.2em; margin-left: 0.1rem; }
   .q-capability {
-    font-size: 0.78rem; color: rgba(5,78,90,0.45);
+    font-size: 0.78rem; color: rgba(15,25,35,0.45);
     display: flex; align-items: center; gap: 0.4rem;
   }
   .q-capability::before { content:'→'; color: var(--sage); }
@@ -341,7 +340,7 @@
     border-radius: 2rem;
   }
   .data-tag.live { background: rgba(107,168,152,0.18); color: var(--sage-lt); }
-  .data-tag.internal { background: rgba(246,131,99,0.18); color: var(--clay-lt); }
+  .data-tag.internal { background: rgba(196,121,74,0.18); color: var(--clay-lt); }
   .data-tag.policy { background: rgba(212,168,75,0.18); color: var(--gold); }
 
   .data-flow {
@@ -359,9 +358,9 @@
     padding: 0.9rem 1.2rem; border-radius: 0.35rem;
     min-width: 110px;
   }
-  .df-box.source { background: rgba(246,131,99,0.15); border: 1px solid rgba(246,131,99,0.3); }
+  .df-box.source { background: rgba(196,121,74,0.15); border: 1px solid rgba(196,121,74,0.3); }
   .df-box.engine { background: var(--clay); }
-  .df-box.output { background: rgba(18,63,109,0.15); border: 1px solid rgba(18,63,109,0.3); }
+  .df-box.output { background: rgba(74,124,111,0.15); border: 1px solid rgba(74,124,111,0.3); }
   .df-label {
     font-size: 0.75rem; font-weight: 500;
   }
@@ -379,7 +378,7 @@
   .assumptions { background: var(--paper); }
   .assump-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
   .assump-card {
-    background: white; border: 1px solid rgba(246,131,99,0.12);
+    background: white; border: 1px solid rgba(196,121,74,0.12);
     border-radius: 0.4rem; padding: 2rem;
   }
   .assump-icon { font-size: 1.4rem; margin-bottom: 1rem; }
@@ -387,41 +386,41 @@
     font-size: 0.9rem; font-weight: 500; color: var(--ink);
     margin-bottom: 0.6rem;
   }
-  .assump-card p { font-size: 0.85rem; line-height: 1.7; color: rgba(5,78,90,0.55); }
+  .assump-card p { font-size: 0.85rem; line-height: 1.7; color: rgba(15,25,35,0.55); }
   .assump-note {
     margin-top: 3rem; padding: 1.8rem 2rem;
     background: rgba(212,168,75,0.08); border: 1px solid rgba(212,168,75,0.22);
     border-radius: 0.4rem; display: flex; gap: 1rem; align-items: flex-start;
   }
   .assump-note-icon { font-size: 1.2rem; flex-shrink: 0; }
-  .assump-note p { font-size: 0.88rem; line-height: 1.7; color: rgba(5,78,90,0.65); }
+  .assump-note p { font-size: 0.88rem; line-height: 1.7; color: rgba(15,25,35,0.65); }
   .assump-note strong { color: var(--ink); }
 
   /* ── SECTION 7: FUTURE ── */
   .future { background: var(--warm); }
   .future-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
   .future-card {
-    background: white; border: 1px solid rgba(246,131,99,0.12);
+    background: white; border: 1px solid rgba(196,121,74,0.12);
     border-radius: 0.4rem; padding: 2.2rem;
     display: flex; gap: 1.5rem; align-items: flex-start;
     transition: box-shadow 0.25s, transform 0.25s;
   }
   .future-card:hover {
-    box-shadow: 0 6px 28px rgba(5,78,90,0.07);
+    box-shadow: 0 6px 28px rgba(15,25,35,0.07);
     transform: translateY(-2px);
   }
   .future-num {
     font-family: 'Playfair Display', serif;
     font-size: 2rem; font-weight: 900;
-    color: rgba(246,131,99,0.2); line-height: 1; flex-shrink: 0; width: 2rem;
+    color: rgba(196,121,74,0.2); line-height: 1; flex-shrink: 0; width: 2rem;
   }
   .future-body h4 { font-size: 0.95rem; font-weight: 500; color: var(--ink); margin-bottom: 0.4rem; }
-  .future-body p { font-size: 0.86rem; line-height: 1.68; color: rgba(5,78,90,0.55); }
+  .future-body p { font-size: 0.86rem; line-height: 1.68; color: rgba(15,25,35,0.55); }
   .future-tag {
     display: inline-block; margin-top: 0.8rem;
     font-size: 0.67rem; font-weight: 500; letter-spacing: 0.06em;
     text-transform: uppercase; padding: 0.22rem 0.65rem;
-    border-radius: 2rem; background: rgba(246,131,99,0.1); color: var(--clay);
+    border-radius: 2rem; background: rgba(196,121,74,0.1); color: var(--clay);
   }
   .future-cta {
     margin-top: 3.5rem; text-align: center;
@@ -474,13 +473,21 @@
     <li><a href="#datasources">Data Sources</a></li>
     <li><a href="#future">Conclusion</a></li>
   </ul>
-  <span class="nav-badge">Hackathon 2025</span>
+  <span class="nav-badge">Cline Hackathon 2026 · HiQ International AB</span>
 </nav>
 
-<!-- ── HERO: BANNER IMAGE FULL PAGE ── -->
-<section style="min-height:100vh; position:relative; display:grid; place-items:center; padding:0; margin:0; background:#054E5A;">
-  <img src="atlascopco_banner.webp" alt="Atlas Copco — Intelligent Component Sourcing & Compliance Verification"
-    style="max-width:100%; max-height:100vh; width:auto; height:auto; object-fit:contain; display:block; margin:0 auto;">
+<!-- ── HERO: BANNER IMAGE, CENTERED WITH PADDING ── -->
+<section style="min-height:100vh; position:relative; display:grid; place-items:center; padding:7rem 4rem 5rem; background:var(--paper);">
+  <div style="text-align:center; max-width:1100px; width:100%;">
+    <img src="atlascopco_banner.webp" alt="Cline AI-Assisted Enterprise Coding Hackathon — Atlas Copco challenge: Intelligent Component Sourcing & Compliance Verification"
+      style="max-width:100%; max-height:72vh; width:auto; height:auto; object-fit:contain; display:block; margin:0 auto; border-radius:0.5rem; box-shadow:0 20px 60px rgba(15,25,35,0.12);">
+    <div style="margin-top:2.5rem; font-size:0.78rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--clay);">
+      Cline AI-Assisted Enterprise Coding Hackathon · 2026
+    </div>
+    <div style="margin-top:0.6rem; font-size:0.95rem; color:rgba(15,25,35,0.55);">
+      Hosted at HiQ International AB · Atlas Copco challenge
+    </div>
+  </div>
   <div class="scroll-hint" style="position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);">
     <div class="scroll-line"></div>
     Scroll
@@ -519,35 +526,35 @@
             <span style="color:var(--clay); font-size:1rem; flex-shrink:0; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.2rem;">Instant cost answers</div>
-              <div style="font-size:0.84rem; color:rgba(5,78,90,0.55); line-height:1.55;">Any component, any date range — in seconds, not weeks</div>
+              <div style="font-size:0.84rem; color:rgba(15,25,35,0.55); line-height:1.55;">Any component, any date range — in seconds, not weeks</div>
             </div>
           </li>
           <li style="display:flex; gap:1rem; align-items:flex-start;">
             <span style="color:var(--clay); font-size:1rem; flex-shrink:0; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.2rem;">Cross-product savings visibility</div>
-              <div style="font-size:0.84rem; color:rgba(5,78,90,0.55); line-height:1.55;">Savings on one product surface automatically across every product sharing that part</div>
+              <div style="font-size:0.84rem; color:rgba(15,25,35,0.55); line-height:1.55;">Savings on one product surface automatically across every product sharing that part</div>
             </div>
           </li>
           <li style="display:flex; gap:1rem; align-items:flex-start;">
             <span style="color:var(--clay); font-size:1rem; flex-shrink:0; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.2rem;">Ranked savings recommendations</div>
-              <div style="font-size:0.84rem; color:rgba(5,78,90,0.55); line-height:1.55;">Full BOM analysis sorted by annual saving, compliance pre-checked</div>
+              <div style="font-size:0.84rem; color:rgba(15,25,35,0.55); line-height:1.55;">Full BOM analysis sorted by annual saving, compliance pre-checked</div>
             </div>
           </li>
           <li style="display:flex; gap:1rem; align-items:flex-start;">
             <span style="color:var(--clay); font-size:1rem; flex-shrink:0; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.2rem;">Live market benchmarking</div>
-              <div style="font-size:0.84rem; color:rgba(5,78,90,0.55); line-height:1.55;">What we last paid vs. what Mouser shows today — always current</div>
+              <div style="font-size:0.84rem; color:rgba(15,25,35,0.55); line-height:1.55;">What we last paid vs. what Mouser shows today — always current</div>
             </div>
           </li>
           <li style="display:flex; gap:1rem; align-items:flex-start;">
             <span style="color:var(--clay); font-size:1rem; flex-shrink:0; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.2rem;">Confidence to act, not just investigate</div>
-              <div style="font-size:0.84rem; color:rgba(5,78,90,0.55); line-height:1.55;">From commissioning a project around a question, to answering it in the same conversation</div>
+              <div style="font-size:0.84rem; color:rgba(15,25,35,0.55); line-height:1.55;">From commissioning a project around a question, to answering it in the same conversation</div>
             </div>
           </li>
         </ul>
@@ -568,10 +575,10 @@
         <div class="goal-card-label">Reason One</div>
         <h3>Margin erodes quietly — at scale, it adds up</h3>
         <ul style="list-style:none; display:flex; flex-direction:column; gap:0.7rem; margin-top:0.5rem;">
-          <li style="display:flex; gap:0.7rem; font-size:0.88rem; color:rgba(5,78,90,0.65); line-height:1.55;"><span style="color:var(--clay); flex-shrink:0;">—</span>A 10% overpayment on a $0.04 capacitor is trivial per unit</li>
-          <li style="display:flex; gap:0.7rem; font-size:0.88rem; color:rgba(5,78,90,0.65); line-height:1.55;"><span style="color:var(--clay); flex-shrink:0;">—</span>Across 14,000+ products and thousands of shared components, it compounds into a material bottom-line number</li>
-          <li style="display:flex; gap:0.7rem; font-size:0.88rem; color:rgba(5,78,90,0.65); line-height:1.55;"><span style="color:var(--clay); flex-shrink:0;">—</span>The organisation can't fix what it can't see</li>
-          <li style="display:flex; gap:0.7rem; font-size:0.88rem; color:rgba(5,78,90,0.65); line-height:1.55;"><span style="color:var(--clay); flex-shrink:0;">—</span>Continuous intelligence beats an annual audit every time</li>
+          <li style="display:flex; gap:0.7rem; font-size:0.88rem; color:rgba(15,25,35,0.65); line-height:1.55;"><span style="color:var(--clay); flex-shrink:0;">—</span>A 10% overpayment on a $0.04 capacitor is trivial per unit</li>
+          <li style="display:flex; gap:0.7rem; font-size:0.88rem; color:rgba(15,25,35,0.65); line-height:1.55;"><span style="color:var(--clay); flex-shrink:0;">—</span>Across 14,000+ products and thousands of shared components, it compounds into a material bottom-line number</li>
+          <li style="display:flex; gap:0.7rem; font-size:0.88rem; color:rgba(15,25,35,0.65); line-height:1.55;"><span style="color:var(--clay); flex-shrink:0;">—</span>The organisation can't fix what it can't see</li>
+          <li style="display:flex; gap:0.7rem; font-size:0.88rem; color:rgba(15,25,35,0.65); line-height:1.55;"><span style="color:var(--clay); flex-shrink:0;">—</span>Continuous intelligence beats an annual audit every time</li>
         </ul>
         <div class="goal-pill">Continuous<span class="goal-pill-sub">Cost optimisation, not annual audits</span></div>
       </div>
@@ -760,7 +767,7 @@
     <div class="fade-up" style="overflow-x: auto; margin-bottom: 3rem;">
       <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
         <thead>
-          <tr style="border-bottom: 2px solid rgba(246,131,99,0.2);">
+          <tr style="border-bottom: 2px solid rgba(196,121,74,0.2);">
             <th style="text-align:left; padding:0.9rem 1rem; font-size:0.7rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--clay); white-space:nowrap;">Data</th>
             <th style="text-align:left; padding:0.9rem 1rem; font-size:0.7rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--clay);">File / Call</th>
             <th style="text-align:left; padding:0.9rem 1rem; font-size:0.7rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--clay);">Source</th>
@@ -769,57 +776,57 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid rgba(246,131,99,0.08); background:white;">
-            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">BOM<br><span style="font-weight:300; color:rgba(5,78,90,0.5); font-size:0.8rem;">Components, products</span></td>
-            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">data/bom.seed.json</code></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Hand-authored fictitious BOM, approved by the challenge owner</td>
-            <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(5,78,90,0.07); color:rgba(5,78,90,0.45);">Static</span></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Customer ERP or PLM (SAP, Teamcenter)</td>
+          <tr style="border-bottom:1px solid rgba(196,121,74,0.08); background:white;">
+            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">BOM<br><span style="font-weight:300; color:rgba(15,25,35,0.5); font-size:0.8rem;">Components, products</span></td>
+            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">data/bom.seed.json</code></td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Hand-authored fictitious BOM, approved by the challenge owner</td>
+            <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(15,25,35,0.07); color:rgba(15,25,35,0.45);">Static</span></td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Customer ERP or PLM (SAP, Teamcenter)</td>
           </tr>
-          <tr style="border-bottom:1px solid rgba(246,131,99,0.08);">
-            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">Price history<br><span style="font-weight:300; color:rgba(5,78,90,0.5); font-size:0.8rem;">Monthly, per component</span></td>
-            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">data/price-history.seed.json</code></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Hand-authored, internally consistent with the BOM</td>
-            <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(5,78,90,0.07); color:rgba(5,78,90,0.45);">Static</span></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Internal procurement or spend database</td>
+          <tr style="border-bottom:1px solid rgba(196,121,74,0.08);">
+            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">Price history<br><span style="font-weight:300; color:rgba(15,25,35,0.5); font-size:0.8rem;">Monthly, per component</span></td>
+            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">data/price-history.seed.json</code></td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Hand-authored, internally consistent with the BOM</td>
+            <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(15,25,35,0.07); color:rgba(15,25,35,0.45);">Static</span></td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Internal procurement or spend database</td>
           </tr>
-          <tr style="border-bottom:1px solid rgba(246,131,99,0.08); background:white;">
+          <tr style="border-bottom:1px solid rgba(196,121,74,0.08); background:white;">
             <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">Mouser pricing, availability, RoHS status</td>
-            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">compare_with_mouser</code><br><span style="font-size:0.75rem; color:rgba(5,78,90,0.45); margin-top:0.3rem; display:block;">called inline</span></td>
-            <td style="padding:1rem; vertical-align:top; font-size:0.83rem;"><a href="https://www.mouser.com/api-hub/" target="_blank" style="color:var(--sage); text-decoration:none; border-bottom:1px solid rgba(18,63,109,0.3);">Mouser Electronics API</a></td>
+            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">compare_with_mouser</code><br><span style="font-size:0.75rem; color:rgba(15,25,35,0.45); margin-top:0.3rem; display:block;">called inline</span></td>
+            <td style="padding:1rem; vertical-align:top; font-size:0.83rem;"><a href="https://www.mouser.com/api-hub/" target="_blank" style="color:var(--sage); text-decoration:none; border-bottom:1px solid rgba(74,124,111,0.3);">Mouser Electronics API</a></td>
             <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(107,168,152,0.15); color:var(--sage);">Live</span></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Same — direct Mouser API. Mock fallback recorded for demo resilience.</td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Same — direct Mouser API. Mock fallback recorded for demo resilience.</td>
           </tr>
-          <tr style="border-bottom:1px solid rgba(246,131,99,0.08);">
-            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">Web supplier intelligence<br><span style="font-weight:300; color:rgba(5,78,90,0.5); font-size:0.8rem;">Mouser fallback</span></td>
-            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">compare_with_mouser</code><br><span style="font-size:0.75rem; color:rgba(5,78,90,0.45); margin-top:0.3rem; display:block;">when Mouser returns no listing</span></td>
-            <td style="padding:1rem; vertical-align:top; font-size:0.83rem;"><a href="https://tavily.com/" target="_blank" style="color:var(--sage); text-decoration:none; border-bottom:1px solid rgba(18,63,109,0.3);">Tavily Search API</a></td>
+          <tr style="border-bottom:1px solid rgba(196,121,74,0.08);">
+            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">Web supplier intelligence<br><span style="font-weight:300; color:rgba(15,25,35,0.5); font-size:0.8rem;">Mouser fallback</span></td>
+            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">compare_with_mouser</code><br><span style="font-size:0.75rem; color:rgba(15,25,35,0.45); margin-top:0.3rem; display:block;">when Mouser returns no listing</span></td>
+            <td style="padding:1rem; vertical-align:top; font-size:0.83rem;"><a href="https://tavily.com/" target="_blank" style="color:var(--sage); text-decoration:none; border-bottom:1px solid rgba(74,124,111,0.3);">Tavily Search API</a></td>
             <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(107,168,152,0.15); color:var(--sage);">Live</span></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Same, or Mouser only</td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Same, or Mouser only</td>
           </tr>
-          <tr style="border-bottom:1px solid rgba(246,131,99,0.08); background:white;">
-            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">EU SVHC Candidate List<br><span style="font-weight:300; color:rgba(5,78,90,0.5); font-size:0.8rem;">REACH Article 33</span></td>
-            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">data/svhc-cache.json</code><br><span style="font-size:0.75rem; color:rgba(5,78,90,0.45); margin-top:0.3rem; display:block;">snapshot: 2026-01-15</span></td>
-            <td style="padding:1rem; vertical-align:top; font-size:0.83rem;">Curated subset of the <a href="https://echa.europa.eu/candidate-list-table" target="_blank" style="color:var(--sage); text-decoration:none; border-bottom:1px solid rgba(18,63,109,0.3);">ECHA SVHC Candidate List</a>. 34 substances with CAS, name, reason for inclusion, and date added.</td>
+          <tr style="border-bottom:1px solid rgba(196,121,74,0.08); background:white;">
+            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">EU SVHC Candidate List<br><span style="font-weight:300; color:rgba(15,25,35,0.5); font-size:0.8rem;">REACH Article 33</span></td>
+            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">data/svhc-cache.json</code><br><span style="font-size:0.75rem; color:rgba(15,25,35,0.45); margin-top:0.3rem; display:block;">snapshot: 2026-01-15</span></td>
+            <td style="padding:1rem; vertical-align:top; font-size:0.83rem;">Curated subset of the <a href="https://echa.europa.eu/candidate-list-table" target="_blank" style="color:var(--sage); text-decoration:none; border-bottom:1px solid rgba(74,124,111,0.3);">ECHA SVHC Candidate List</a>. 34 substances with CAS, name, reason for inclusion, and date added.</td>
             <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(212,168,75,0.15); color:var(--gold);">Cache</span></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Scheduled refresh from <code style="font-size:0.76rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.1rem 0.3rem; border-radius:0.2rem;">echa.europa.eu</code>. File's <code style="font-size:0.76rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.1rem 0.3rem; border-radius:0.2rem;">note</code> field documents the operator contract.</td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Scheduled refresh from <code style="font-size:0.76rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.1rem 0.3rem; border-radius:0.2rem;">echa.europa.eu</code>. File's <code style="font-size:0.76rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.1rem 0.3rem; border-radius:0.2rem;">note</code> field documents the operator contract.</td>
           </tr>
           <tr style="background:var(--paper);">
-            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">Compliance rules<br><span style="font-weight:300; color:rgba(5,78,90,0.5); font-size:0.8rem;">RoHS, REACH, Dodd-Frank</span></td>
-            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">data/compliance-rules.seed.json</code></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Hand-authored from the named regulations</td>
-            <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(5,78,90,0.07); color:rgba(5,78,90,0.45);">Static</span></td>
-            <td style="padding:1rem; color:rgba(5,78,90,0.6); vertical-align:top; font-size:0.83rem;">Regulatory rules database, internal compliance team feed, or a commercial source such as Z2Data</td>
+            <td style="padding:1rem; color:var(--ink); font-weight:500; vertical-align:top;">Compliance rules<br><span style="font-weight:300; color:rgba(15,25,35,0.5); font-size:0.8rem;">RoHS, REACH, Dodd-Frank</span></td>
+            <td style="padding:1rem; vertical-align:top;"><code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.2rem 0.4rem; border-radius:0.2rem;">data/compliance-rules.seed.json</code></td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Hand-authored from the named regulations</td>
+            <td style="padding:1rem; text-align:center; vertical-align:top;"><span style="font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:2rem; background:rgba(15,25,35,0.07); color:rgba(15,25,35,0.45);">Static</span></td>
+            <td style="padding:1rem; color:rgba(15,25,35,0.6); vertical-align:top; font-size:0.83rem;">Regulatory rules database, internal compliance team feed, or a commercial source such as Z2Data</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <!-- SVHC callout -->
-    <div class="fade-up" style="background:white; border:1px solid rgba(246,131,99,0.15); border-radius:0.4rem; padding:2.2rem; border-left:4px solid var(--gold);">
+    <div class="fade-up" style="background:white; border:1px solid rgba(196,121,74,0.15); border-radius:0.4rem; padding:2.2rem; border-left:4px solid var(--gold);">
       <div style="font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:1rem;">Why the SVHC list lives in <code style="font-family:'DM Mono',monospace; font-size:0.78rem; background:rgba(212,168,75,0.1); padding:0.15rem 0.4rem; border-radius:0.2rem; color:var(--gold);">svhc-cache.json</code> rather than being fetched on each call</div>
-      <p style="font-size:0.9rem; line-height:1.75; color:rgba(5,78,90,0.65); margin-bottom:1rem;">ECHA publishes the SVHC list as XML or Excel on their candidate list page — not as a JSON API. For the demo, a snapshot is faster, more reliable on stage, and easy to verify against the public source. The file's top-level <code style="font-family:'DM Mono',monospace; font-size:0.82rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.1rem 0.35rem; border-radius:0.2rem;">source</code> and <code style="font-family:'DM Mono',monospace; font-size:0.82rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.1rem 0.35rem; border-radius:0.2rem;">snapshot_date</code> fields make provenance explicit in every tool response.</p>
-      <p style="font-size:0.9rem; line-height:1.75; color:rgba(5,78,90,0.65);">When <code style="font-family:'DM Mono',monospace; font-size:0.82rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.1rem 0.35rem; border-radius:0.2rem;">compliance_check</code> returns a violation, the response includes the same <code style="font-family:'DM Mono',monospace; font-size:0.82rem; background:rgba(246,131,99,0.08); color:var(--clay); padding:0.1rem 0.35rem; border-radius:0.2rem;">svhc_source_snapshot</code> so consumers can audit where the rule came from. In production, the cache would be refreshed on a schedule — for example weekly — by a small fetcher that pulls the official list and re-emits it in the same format.</p>
+      <p style="font-size:0.9rem; line-height:1.75; color:rgba(15,25,35,0.65); margin-bottom:1rem;">ECHA publishes the SVHC list as XML or Excel on their candidate list page — not as a JSON API. For the demo, a snapshot is faster, more reliable on stage, and easy to verify against the public source. The file's top-level <code style="font-family:'DM Mono',monospace; font-size:0.82rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.1rem 0.35rem; border-radius:0.2rem;">source</code> and <code style="font-family:'DM Mono',monospace; font-size:0.82rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.1rem 0.35rem; border-radius:0.2rem;">snapshot_date</code> fields make provenance explicit in every tool response.</p>
+      <p style="font-size:0.9rem; line-height:1.75; color:rgba(15,25,35,0.65);">When <code style="font-family:'DM Mono',monospace; font-size:0.82rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.1rem 0.35rem; border-radius:0.2rem;">compliance_check</code> returns a violation, the response includes the same <code style="font-family:'DM Mono',monospace; font-size:0.82rem; background:rgba(196,121,74,0.08); color:var(--clay); padding:0.1rem 0.35rem; border-radius:0.2rem;">svhc_source_snapshot</code> so consumers can audit where the rule came from. In production, the cache would be refreshed on a schedule — for example weekly — by a small fetcher that pulls the official list and re-emits it in the same format.</p>
     </div>
   </div>
 </section>
@@ -843,35 +850,35 @@
             <span style="color:var(--clay); flex-shrink:0; font-size:1rem; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.15rem;">An MCP server connected to Atlas Copco's real data</div>
-              <div style="font-size:0.83rem; color:rgba(5,78,90,0.55);">BOMs, purchase orders, supplier data, live Mouser pricing, and compliance rules — all in one place</div>
+              <div style="font-size:0.83rem; color:rgba(15,25,35,0.55);">BOMs, purchase orders, supplier data, live Mouser pricing, and compliance rules — all in one place</div>
             </div>
           </li>
           <li style="display:flex; gap:1rem; align-items:flex-start;">
             <span style="color:var(--clay); flex-shrink:0; font-size:1rem; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.15rem;">Plain language in, actionable insight out</div>
-              <div style="font-size:0.83rem; color:rgba(5,78,90,0.55);">Product Managers ask real questions — the AI queries, compares, and returns ranked recommendations</div>
+              <div style="font-size:0.83rem; color:rgba(15,25,35,0.55);">Product Managers ask real questions — the AI queries, compares, and returns ranked recommendations</div>
             </div>
           </li>
           <li style="display:flex; gap:1rem; align-items:flex-start;">
             <span style="color:var(--clay); flex-shrink:0; font-size:1rem; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.15rem;">5 months of manual work → 5 minutes</div>
-              <div style="font-size:0.83rem; color:rgba(5,78,90,0.55);">Cost intelligence at the speed decisions actually need to be made</div>
+              <div style="font-size:0.83rem; color:rgba(15,25,35,0.55);">Cost intelligence at the speed decisions actually need to be made</div>
             </div>
           </li>
           <li style="display:flex; gap:1rem; align-items:flex-start;">
             <span style="color:var(--clay); flex-shrink:0; font-size:1rem; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.15rem;">Compliance built in, not bolted on</div>
-              <div style="font-size:0.83rem; color:rgba(5,78,90,0.55);">Every recommendation is filtered against RoHS, REACH, and Dodd-Frank before it's surfaced</div>
+              <div style="font-size:0.83rem; color:rgba(15,25,35,0.55);">Every recommendation is filtered against RoHS, REACH, and Dodd-Frank before it's surfaced</div>
             </div>
           </li>
           <li style="display:flex; gap:1rem; align-items:flex-start;">
             <span style="color:var(--clay); flex-shrink:0; font-size:1rem; margin-top:0.1rem;">→</span>
             <div>
               <div style="font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:0.15rem;">A foundation, not a one-off tool</div>
-              <div style="font-size:0.83rem; color:rgba(5,78,90,0.55);">Every data connection made today unlocks a wider set of capabilities tomorrow</div>
+              <div style="font-size:0.83rem; color:rgba(15,25,35,0.55);">Every data connection made today unlocks a wider set of capabilities tomorrow</div>
             </div>
           </li>
         </ul>
