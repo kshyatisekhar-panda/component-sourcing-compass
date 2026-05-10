@@ -52,6 +52,19 @@
         "type": "required_declaration",
         "spec_field": "conflict_minerals_declared"
       }
+    },
+    {
+      "id": "US-PROP65-LISTED",
+      "market": "US",
+      "regulation": "California Proposition 65 (Cal. Health & Safety Code §25249.5 et seq.)",
+      "title": "Proposition 65 listed substance presence — warning required",
+      "description": "California Prop 65 requires a clear and reasonable warning before knowingly exposing any individual in California to a chemical on the published list of carcinogens, reproductive toxicants, or developmental toxicants. Cross-references each component's declared CAS numbers against a snapshot of the OEHHA Prop 65 list (data/prop65-cache.json).",
+      "severity": "warning",
+      "check": {
+        "type": "substance_list_match",
+        "spec_field": "cas_numbers",
+        "list_name": "prop65"
+      }
     }
   ]
 }

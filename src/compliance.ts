@@ -4,6 +4,7 @@ import type { Component } from "./bom.js";
 
 const RULES_PATH = join(process.cwd(), "data", "compliance-rules.seed.json");
 const SVHC_PATH = join(process.cwd(), "data", "svhc-cache.json");
+const PROP65_PATH = join(process.cwd(), "data", "prop65-cache.json");
 
 export type Market = "EU" | "US";
 export type Severity = "blocking" | "warning";
@@ -15,8 +16,18 @@ type MaxThresholdCheck = {
   unit?: string;
 };
 type RequiredDeclarationCheck = { type: "required_declaration"; spec_field: string };
+type SubstanceListMatchCheck = {
+  type: "substance_list_match";
+  spec_field: string;
+  list_name: "svhc" | "prop65";
+};
+// Legacy alias kept for backwards compatibility with older rule fixtures.
 type SvhcSubstanceMatchCheck = { type: "svhc_substance_match"; spec_field: string };
-type Check = MaxThresholdCheck | RequiredDeclarationCheck | SvhcSubstanceMatchCheck;
+type Check =
+  | MaxThresholdCheck
+  | RequiredDeclarationCheck
+  | SubstanceListMatchCheck
+  | SvhcSubstanceMatchCheck;
 
 export type Rule = {
   id: string;
@@ -29,24 +40,29 @@ export type Rule = {
   check: Check;
 };
 
-export type SvhcEntry = {
+export type SubstanceEntry = {
   cas: string;
   name: string;
   reason_for_inclusion: string;
   date_added: string;
 };
 
-export type SvhcCache = {
+export type SubstanceListCache = {
   source: string;
   regulation: string;
   snapshot_date: string;
   note: string;
-  substances: SvhcEntry[];
+  substances: SubstanceEntry[];
 };
+
+// Aliases for callers that still refer to the SVHC types.
+export type SvhcEntry = SubstanceEntry;
+export type SvhcCache = SubstanceListCache;
 
 export type ComplianceContext = {
   rules: Rule[];
-  svhc: SvhcCache;
+  svhc: SubstanceListCache;
+  prop65: SubstanceListCache;
 };
 
 export type Violation = {
@@ -56,7 +72,10 @@ export type Violation = {
   severity: Severity;
   finding: string;
   recommendation: string;
-  matched_substances?: SvhcEntry[];
+  matched_substances?: SubstanceEntry[];
+  source_snapshot_date?: string;
+  source_url?: string;
+  // legacy field, retained for older consumers
   svhc_source_snapshot?: string;
 };
 
@@ -73,13 +92,15 @@ let cachedContext: ComplianceContext | null = null;
 
 export async function loadComplianceContext(): Promise<ComplianceContext> {
   if (cachedContext) return cachedContext;
-  const [rulesRaw, svhcRaw] = await Promise.all([
+  const [rulesRaw, svhcRaw, prop65Raw] = await Promise.all([
     readFile(RULES_PATH, "utf8"),
     readFile(SVHC_PATH, "utf8"),
+    readFile(PROP65_PATH, "utf8"),
   ]);
   cachedContext = {
     rules: (JSON.parse(rulesRaw) as { rules: Rule[] }).rules,
-    svhc: JSON.parse(svhcRaw) as SvhcCache,
+    svhc: JSON.parse(svhcRaw) as SubstanceListCache,
+    prop65: JSON.parse(prop65Raw) as SubstanceListCache,
   };
   return cachedContext;
 }
@@ -123,6 +144,62 @@ export function evaluate(
     rules_evaluated: evaluated,
     rules_skipped: skipped,
     violations,
+  };
+}
+
+function listLabel(listName: "svhc" | "prop65"): string {
+  return listName === "svhc" ? "SVHC" : "Prop 65";
+}
+
+function listRecommendation(listName: "svhc" | "prop65"): string {
+  return listName === "svhc"
+    ? "REACH Article 33 requires disclosure of these substances to recipients of the article when present above 0.1% (w/w). Update the safety data sheet and customer disclosures."
+    : "California Proposition 65 requires a clear and reasonable warning before exposing any person to these substances. Update product warning labels and customer disclosures for the California market.";
+}
+
+function checkSubstanceListMatch(
+  component: Component,
+  rule: Rule,
+  spec_field: string,
+  list_name: "svhc" | "prop65",
+  ctx: ComplianceContext,
+): { violation: Violation | null; applicable: boolean } {
+  const specs = component.specifications ?? {};
+  const value = specs[spec_field];
+  if (!Array.isArray(value)) return { violation: null, applicable: false };
+
+  const cache = list_name === "svhc" ? ctx.svhc : ctx.prop65;
+  const label = listLabel(list_name);
+  const cas_list = value.filter((c): c is string => typeof c === "string");
+  const matches = cas_list.flatMap((cas) => {
+    const entry = cache.substances.find((s) => s.cas === cas);
+    return entry ? [entry] : [];
+  });
+
+  if (matches.length === 0) return { violation: null, applicable: true };
+
+  const finding =
+    matches.length === 1
+      ? `Contains 1 ${label} substance: ${matches[0].name} (CAS ${matches[0].cas}, listed ${matches[0].date_added}). Reason: ${matches[0].reason_for_inclusion}.`
+      : `Contains ${matches.length} ${label} substances: ${matches
+          .map((m) => `${m.name} (CAS ${m.cas}, listed ${m.date_added})`)
+          .join("; ")}.`;
+
+  return {
+    applicable: true,
+    violation: {
+      rule_id: rule.id,
+      regulation: rule.regulation,
+      title: rule.title,
+      severity: rule.severity,
+      finding,
+      recommendation: listRecommendation(list_name),
+      matched_substances: matches,
+      source_snapshot_date: cache.snapshot_date,
+      source_url: cache.source,
+      // legacy field for older callers
+      svhc_source_snapshot: list_name === "svhc" ? cache.snapshot_date : undefined,
+    },
   };
 }
 
@@ -175,35 +252,16 @@ function checkRule(
     };
   }
 
-  // svhc_substance_match
-  if (!Array.isArray(value)) return { violation: null, applicable: false };
-  const cas_list = value.filter((c): c is string => typeof c === "string");
-  const matches = cas_list.flatMap((cas) => {
-    const entry = ctx.svhc.substances.find((s) => s.cas === cas);
-    return entry ? [entry] : [];
-  });
+  if (rule.check.type === "substance_list_match") {
+    return checkSubstanceListMatch(
+      component,
+      rule,
+      rule.check.spec_field,
+      rule.check.list_name,
+      ctx,
+    );
+  }
 
-  if (matches.length === 0) return { violation: null, applicable: true };
-
-  const finding =
-    matches.length === 1
-      ? `Contains 1 SVHC substance: ${matches[0].name} (CAS ${matches[0].cas}, listed ${matches[0].date_added}). Reason: ${matches[0].reason_for_inclusion}.`
-      : `Contains ${matches.length} SVHC substances: ${matches
-          .map((m) => `${m.name} (CAS ${m.cas}, listed ${m.date_added})`)
-          .join("; ")}.`;
-
-  return {
-    applicable: true,
-    violation: {
-      rule_id: rule.id,
-      regulation: rule.regulation,
-      title: rule.title,
-      severity: rule.severity,
-      finding,
-      recommendation:
-        "REACH Article 33 requires disclosure of these substances to recipients of the article when present above 0.1% (w/w). Update the safety data sheet and customer disclosures.",
-      matched_substances: matches,
-      svhc_source_snapshot: ctx.svhc.snapshot_date,
-    },
-  };
+  // legacy svhc_substance_match — treat as substance_list_match against svhc
+  return checkSubstanceListMatch(component, rule, rule.check.spec_field, "svhc", ctx);
 }
