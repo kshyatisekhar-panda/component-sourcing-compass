@@ -58,10 +58,16 @@
     color: var(--ink); opacity: 0.5; transition: opacity 0.2s;
   }
   .nav-links a:hover { opacity: 1; }
+  .nav-badge-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
   .nav-badge {
     font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em;
     text-transform: uppercase; padding: 0.4rem 1rem;
     background: var(--clay); color: white; border-radius: 2rem;
+    white-space: nowrap;
+  }
+  .nav-badge-sub {
+    font-size: 0.62rem; font-weight: 400; letter-spacing: 0.09em;
+    text-transform: uppercase; color: rgba(15,25,35,0.45);
   }
 
   /* ── SHARED ── */
@@ -482,7 +488,10 @@
     <li><a href="#datasources">Data Sources</a></li>
     <li><a href="#future">Conclusion</a></li>
   </ul>
-  <span class="nav-badge">Cline Hackathon 2026 · HiQ International AB</span>
+  <div class="nav-badge-wrap">
+    <span class="nav-badge">Cline Hackathon 2026</span>
+    <span class="nav-badge-sub">HiQ International AB</span>
+  </div>
 </nav>
 
 <!-- ── HERO: BANNER IMAGE, CENTERED WITH PADDING ── -->
