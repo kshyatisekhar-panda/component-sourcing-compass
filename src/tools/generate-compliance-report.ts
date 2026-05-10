@@ -17,14 +17,18 @@ const MODEL = "anthropic/claude-sonnet-4.5";
 
 // ─── LLM prompt ───────────────────────────────────────────────────────────────
 
-const SYSTEM_PROMPT = `You are a senior compliance officer at Atlas Copco writing formal compliance certificates for customer disclosure. Your tone is conservative, precise, and auditable. Every claim you make must be supported by the structured verdict data provided. Cite specific regulations by their full reference, for example RoHS Directive 2011/65/EU, REACH (EC) No 1907/2006 Article 33, or Dodd Frank Section 1502.
+const SYSTEM_PROMPT = `You are a senior compliance officer at Atlas Copco drafting an EU Declaration of Conformity (for the EU market) or an internal market compliance assessment (for the US market). The output is a DRAFT prepared for internal legal review BEFORE the manufacturer's authorised signatory signs the declaration and applies CE marking or other market clearance.
+
+Voice: precise, conservative, auditable. Address Atlas Copco's legal and compliance team, not the end customer. The document will be reviewed and revised by Legal before any external use.
+
+Every claim must be supported by the structured verdict data provided. Cite regulations by their full reference, for example RoHS Directive 2011/65/EU, REACH (EC) No 1907/2006 Article 33, Dodd Frank Section 1502.
 
 Never invent component names, dates, CAS numbers, or substances beyond what is in the verdict data.
 
 Output rules:
-- Write 300 to 450 words.
+- 300 to 450 words.
 - Do NOT include a top level title. Do NOT repeat the product name, market, report date, or status as a metadata block. The document already shows these in its header. Begin directly with the first section.
-- Use exactly four section headings, in this order, using markdown level two (##): "Scope of Assessment", "Findings Summary", "Detailed Findings", "Conclusion".
+- Use exactly four section headings, in this order, using markdown level two (##): "Scope of Assessment", "Findings Summary", "Detailed Findings", "Recommendation for Legal Review".
 - Under each heading write flowing prose in full sentences. Do not use bullet lists.
 - Use **bold** sparingly to highlight a key finding (a substance name, a specific percentage, or the overall verdict). Do not bold whole sentences.
 
@@ -32,11 +36,11 @@ Section content:
 1. Scope of Assessment: which product, which market, which regulations were evaluated, the date the assessment was performed, and the data sources used (specifically reference the ECHA SVHC Candidate List snapshot date when EU).
 2. Findings Summary: how many components evaluated, overall status, the headline number that explains the verdict.
 3. Detailed Findings: for each non compliant or warning component, the specific violation, the regulation cited by full reference, the substance or property at issue with its measurement, and the recommended remediation. For compliant components, a brief attestation by name.
-4. Conclusion: a single clear statement of whether the product can be placed on the market in the named jurisdiction at the named date, and any disclosure obligations or remediation required.
+4. Recommendation for Legal Review: a single clear recommendation to Legal on whether the document may proceed to manufacturer signature and market placement, or whether remediation is required first.
 
-If overall status is non_compliant, the conclusion must say the product cannot be placed on the market until the violations are remediated.
-If overall status is warning, the conclusion must say the product is saleable but documentation gaps remain.
-If overall status is compliant, the conclusion must give clear positive attestation.`;
+If overall status is non_compliant, the recommendation must state that the document cannot proceed to signature and CE marking (EU) or market placement (US) until the violations are remediated.
+If overall status is warning, the recommendation must state that the document may proceed only after the identified documentation gap is closed.
+If overall status is compliant, the recommendation must state that the document is ready for manufacturer signature pending Legal's standard review.`;
 
 // ─── HTML rendering (compliance certificate body) ─────────────────────────────
 
@@ -185,7 +189,13 @@ type CertificateInput = {
 };
 
 function renderCertificateHtml(input: CertificateInput): string {
-  const documentTitle = `Compliance Certificate — ${input.product.name} — ${MARKET_LABEL[input.market]}`;
+  const isEu = input.market === "EU";
+  const docKind = isEu ? "EU Declaration of Conformity" : "US Market Compliance Assessment";
+  const documentTitle = `${docKind} (draft), ${input.product.name}, ${MARKET_LABEL[input.market]}`;
+  const headerTitle = `${docKind} (draft for legal review)`;
+  const headerSubtitle = isEu
+    ? `Draft EU Declaration of Conformity for the European Union market. Prepared for internal legal review prior to manufacturer signature and CE marking.`
+    : `Draft market compliance assessment for the United States market. Prepared for internal legal review prior to market placement.`;
   const statusLabel = STATUS_LABEL[input.overall_status];
 
   const body = `<section class="compliance-body">
@@ -216,12 +226,12 @@ ${findingsTable(input.verdicts)}
 
   return renderBrandedReport({
     documentTitle,
-    headerTitle: "Compliance Certificate",
-    headerSubtitle: `Verification of regulatory compliance for product placement on the ${MARKET_LABEL[input.market]} market.`,
+    headerTitle,
+    headerSubtitle,
     body,
     bodyCss: BODY_CSS,
     footerSources: input.sources,
-    footerNote: `This certificate was generated by an AI compliance assistant on ${input.report_date} using structured verdict data from the component sourcing compass. Underlying regulations and substance lists are cited above. All factual claims are traceable to the verdict data. Verify against the official regulatory sources before any binding legal use.`,
+    footerNote: `This draft was prepared by an AI compliance assistant on ${input.report_date} using structured verdict data from the component sourcing compass. Underlying regulations and substance lists are cited above. All factual claims are traceable to the verdict data. The document must be reviewed and approved by Atlas Copco Legal before manufacturer signature, CE marking, or any external use.`,
   });
 }
 
@@ -238,7 +248,7 @@ async function writeCertificateFile(html: string, fileName: string): Promise<str
 export function registerGenerateComplianceReport(server: McpServer): void {
   server.tool(
     "generate_compliance_report",
-    "Generates a formal Atlas Copco branded compliance certificate for a product against a target market. Internally runs a complete compliance check, then asks Claude to compose a 300 to 450 word certificate citing the specific regulations, components evaluated, findings, and any violations. Returns both the prose for in chat display and a saved HTML file with full Atlas Copco branding (gradient header, findings table, sources, AI generation disclosure) suitable for opening in a browser or printing to PDF for customer disclosure. Use this when the user asks for a compliance certificate, audit document, customer disclosure, or formal compliance report. Requires OPENROUTER_API_KEY in the environment.",
+    "Generates a draft EU Declaration of Conformity (for EU market) or a draft US market compliance assessment (for US market) for internal legal review at Atlas Copco. The document is NOT a third party certificate; it is the manufacturer's self declaration document that Atlas Copco's authorised signatory will sign after Legal review. Internally runs a complete compliance check, then asks Claude to compose a 300 to 450 word draft citing the specific regulations, components evaluated, findings, and any violations. Returns both the prose for in chat display and a saved Atlas Copco branded HTML file suitable for Legal and Compliance review before manufacturer signature and CE marking (EU) or market placement (US). Use this when the user asks for a declaration of conformity, compliance assessment, audit document, or formal compliance brief for an internal compliance team. Requires OPENROUTER_API_KEY in the environment.",
     {
       product_id: z.string().describe("Product ID to certify (e.g. PROD-AC-COMP-001)."),
       market: z.enum(["EU", "US"]).describe("Target market for the certificate: 'EU' or 'US'."),

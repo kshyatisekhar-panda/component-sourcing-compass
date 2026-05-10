@@ -31,7 +31,7 @@ Never hardcode or guess product IDs or component IDs. Always call `list_componen
 | `cross_product_suggestions` | User asks about portfolio-wide savings or which change has the broadest impact. |
 | `compliance_check` | User asks whether a product/component can be sold in a market, or what regulatory risks exist. |
 | `generate_sourcing_report` | User wants a full sourcing analysis (cost + compliance + Mouser + trends) for an internal audience or meeting. Output is dashboard style. |
-| `generate_compliance_report` | User wants a formal compliance certificate or customer-facing disclosure document. Output is AI-written prose plus a branded HTML file. Use when the request mentions "certificate", "audit document", "customer disclosure", or "for a customer order". |
+| `generate_compliance_report` | User wants a draft EU Declaration of Conformity (EU) or draft market compliance assessment (US) for internal Legal review. The output is NOT a third party certificate; it is the manufacturer's draft document for legal review prior to signature and CE marking. Use when the request mentions "declaration of conformity", "DoC", "compliance assessment", "audit document", or "compliance brief for legal". |
 | `lookup_external_product` | Fallback when the user asks about a product that is NOT in our internal BOM. Searches the web and reconstructs an illustrative BOM via AI. Result is cached for the session so subsequent tools work on it. Always disclose the result is illustrative. |
 
 ---
@@ -75,13 +75,14 @@ Follow these patterns for common question types. Do not ask the user for IDs —
 4. The product is now cached for the session, so chain other tools on it as normal (cost_ranked_list, compliance_check, compare_with_mouser)
 5. Always preserve the "illustrative" caveat in any follow up answer about this product
 
-### "Generate a compliance certificate" or "I need an audit document" or "Customer wants compliance documentation"
+### "Draft a Declaration of Conformity" or "Compliance brief for Legal" or "Audit document" for a target market
 1. `generate_compliance_report` with the product_id and market
-2. The tool produces a chat-ready prose certificate AND a saved branded HTML file under `output/`
-3. In chat: lead with the verdict in one sentence (compliant, warning, or non compliant), name the offending component if any, then tell the user the certificate file has been saved and where
-4. Do NOT paste the full prose certificate again in chat — Cline already shows it from the tool result. Just summarise.
-5. If overall status is non compliant, follow with one sentence on what must change before market entry
-6. If the user asks for both EU and US, call the tool twice; comment briefly on the contrast between markets
+2. The tool produces a chat-ready draft document AND a saved branded HTML file under `output/`
+3. The output is a manufacturer's DRAFT for internal Legal review, not a third party certificate. Never describe it as a "certificate". Refer to it as a "draft EU Declaration of Conformity" for EU or a "draft compliance assessment" for US.
+4. In chat: lead with the verdict in one sentence (compliant, warning, or non compliant), name the offending component if any, then tell the user the draft has been saved and where, and that it needs Legal review before manufacturer signature and CE marking
+5. Do NOT paste the full prose again in chat — Cline already shows it from the tool result. Just summarise.
+6. If overall status is non compliant, follow with one sentence on what must change before the document can proceed to signature
+7. If the user asks for both EU and US, call the tool twice; comment briefly on the contrast between markets
 
 ---
 
