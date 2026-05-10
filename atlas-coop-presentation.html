@@ -40,11 +40,17 @@
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(196,121,74,0.15);
   }
+  .nav-brand { display: flex; flex-direction: column; line-height: 1.15; }
   .nav-logo {
     font-family: 'Playfair Display', serif;
     font-weight: 900; font-size: 1.05rem; letter-spacing: 0.04em; color: var(--ink);
   }
   .nav-logo span { color: var(--clay); }
+  .nav-logo-sub {
+    font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 0.62rem;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    color: rgba(15,25,35,0.45); margin-top: 0.2rem;
+  }
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a {
     font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em;
@@ -463,7 +469,10 @@
 
 <!-- ── NAV ── -->
 <nav>
-  <div class="nav-logo">Atlas <span>Copco</span></div>
+  <div class="nav-brand">
+    <div class="nav-logo">Component Sourcing <span>Compass</span></div>
+    <div class="nav-logo-sub">Atlas Copco challenge entry</div>
+  </div>
   <ul class="nav-links">
     <li><a href="#user">Target User & Goal</a></li>
     <li><a href="#goal">Why It Matters</a></li>
